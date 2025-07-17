@@ -1,0 +1,8 @@
+﻿namespace MicrosoftDocsGallery
+{
+    [default_interface]
+    runtimeclass WebViewPage : Microsoft.UI.Xaml.Controls.Page
+    {
+        WebViewPage();
+    }
+}

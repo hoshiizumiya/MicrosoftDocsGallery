@@ -1,0 +1,8 @@
+﻿namespace MicrosoftDocsGallery
+{
+    [default_interface]
+    runtimeclass FundamentalsPage : Microsoft.UI.Xaml.Controls.Page
+    {
+        FundamentalsPage();
+    }
+}

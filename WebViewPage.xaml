@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="MicrosoftDocsGallery.WebViewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:MicrosoftDocsGallery"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <WebView2
+            x:Name="MSDNWebView2"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            MinWidth="200"
+            MinHeight="200"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Source="https://learn.microsoft.com/windows/apps/winui/" />
+
+    </Grid>
+</Page>
