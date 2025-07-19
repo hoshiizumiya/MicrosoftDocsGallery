@@ -12,4 +12,9 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::MicrosoftDocsGallery::implementation
 {
+	SettingsPage::SettingsPage()
+	{
+		InitializeComponent();
+
+	}
 }

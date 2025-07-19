@@ -6,11 +6,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 {
     struct SettingsPage : SettingsPageT<SettingsPage>
     {
-        SettingsPage()
-        {
-            // Xaml objects should not call InitializeComponent during construction.
-            // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
-        }
+        SettingsPage();
 
     };
 }

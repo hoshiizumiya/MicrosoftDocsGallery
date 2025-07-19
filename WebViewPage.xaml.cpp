@@ -11,6 +11,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
 {
 	WebViewPage::WebViewPage()
 	{
+		InitializeComponent();
+
 	}
 
 	void WebViewPage::OnNavigatedTo(winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& e)

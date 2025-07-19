@@ -18,6 +18,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 {
 	MainWindow::MainWindow()
 	{
+		InitializeComponent();
 		SetWindowStyle();
 	}
 
@@ -164,7 +165,7 @@ void winrt::MicrosoftDocsGallery::implementation::MainWindow::SetWindowStyle()
 	// 获取XAML中x:Name为 AppTitleBar 的元素，并设置为TitleBar
 	SetTitleBar(AppTitleBar());
 
-	//The icon can not be set!I dont konw why?????
+	//BUG The icon can not be set!I dont know why?????
 	this->AppWindow().SetIcon(L"ms-appx:///Assets/icon.ico");
 	//this->Title(L"Microsoft Docs Gallery");
 	//this->Title(winrt::Windows::ApplicationModel::Package::Current().DisplayName());
