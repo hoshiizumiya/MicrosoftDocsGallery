@@ -39,14 +39,21 @@
                     Content="Fundamentals"
                     Icon="Library"
                     Tag="fundamentals" />
-                <NavigationViewItem
-                    Content="Docs"
-                    Icon="World"
-                    Tag="webview" />
-                <NavigationViewItem
-                    Content="Welcome"
-                    Icon="Contact"
-                    Tag="welcome" />
+                <NavigationViewItem Content="Docs" Tag="webview">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7BE;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="FavoriteList" Tag="fav">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE728;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Welcome" Tag="welcome">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xF133;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>

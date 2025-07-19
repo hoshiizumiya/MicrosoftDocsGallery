@@ -80,6 +80,10 @@ namespace winrt::MicrosoftDocsGallery::implementation
 			openWelcomePage();
 		else if (tag == L"Settings")
 			openSettingsPage();
+		else if (tag==L"Contribute")
+		{
+			openWebViewPage(L"https://github.com/hoshiizumiya/MicrosoftDocsGallery");
+		}
 		// 设置导航栏高亮
 		for (auto const& item : sender.MenuItems()) {
 			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
