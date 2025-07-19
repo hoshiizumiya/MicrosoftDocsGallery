@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="MicrosoftDocsGallery.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,6 +9,10 @@
     mc:Ignorable="d">
 
     <Grid>
-
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
+            <TextBlock Text="设置" FontSize="24" FontWeight="Bold"/>
+            <ToggleSwitch Header="深色模式"/>
+            <Slider Header="字体大小" Minimum="12" Maximum="32" Value="16" Width="200"/>
+        </StackPanel>
     </Grid>
 </Page>

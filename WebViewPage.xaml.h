@@ -8,6 +8,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
     {
         WebViewPage();
 
+        void OnNavigatedTo(winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& e);
     };
 }
 

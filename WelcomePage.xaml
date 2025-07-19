@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="MicrosoftDocsGallery.WelcomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,6 +9,10 @@
     mc:Ignorable="d">
 
     <Grid>
-
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="24">
+            <TextBlock Text="欢迎使用 Microsoft Docs Gallery!" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Text="一个专为 Microsoft Learn/Docs 打造的文档浏览器。" FontSize="18" HorizontalAlignment="Center"/>
+            <Button Content="开始使用" Width="160" Height="48" Click="StartButton_Click" HorizontalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </Page>

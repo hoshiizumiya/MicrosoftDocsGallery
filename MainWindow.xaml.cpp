@@ -5,7 +5,8 @@
 #endif
 #include <winrt/Windows.UI.Xaml.Interop.h>
 #include "winrt/Microsoft.UI.Xaml.Controls.h"
-
+#include <winrt/Microsoft.UI.Windowing.h>
+#include <winrt/Windows.Graphics.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -17,13 +18,10 @@ namespace winrt::MicrosoftDocsGallery::implementation
 {
 	MainWindow::MainWindow()
 	{
-		//InitializeComponent();
-		// 获取XAML中x:Name为 AppTitleBar 的元素，并设置为TitleBar
-		//SetTitleBar(UIElement::AppTitleBar); Wrong usage
-		//SetTitleBar(AppTitleBar());
-
-
+		SetWindowStyle();
 	}
+
+	//void NavigateToPage()
 	void MainWindow::openHomePage()
 	{
 		mainFrame().Navigate(xaml_typename<HomePage>());
@@ -38,37 +36,93 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		mainFrame().Navigate(xaml_typename<SettingsPage>());
 
 	}
+	void MainWindow::openWebViewPage(hstring const& url)
+	{
+		mainFrame().Navigate(xaml_typename<WebViewPage>(), box_value(url));
+	}
+	void MainWindow::openWelcomePage()
+	{
+		mainFrame().Navigate(xaml_typename<WelcomePage>());
+	}
 
 	void MainWindow::Page_Loaded(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
 	{
+		openHomePage();
 	}
 
 	void MainWindow::NavigationView_ItemInvoked(winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewItemInvokedEventArgs const& args)
 	{
-		if (args.IsSettingsInvoked())//方法指示 InvokedItem 是否为 Settings 的菜单项
+		hstring tag;
+		if (args.IsSettingsInvoked())
 		{
-			//打开设置界面 open setting page
 			openSettingsPage();
-		}
-		else
-		{
-			//为确定哪个页面会被请求，已给每个页面设置独一无二的的 Tag 
-			//Tag 在 xaml 中被自动解析并装箱成一个 IInspectable 属性。IInspectable 是所有 WinRT 接口的根属性，使用拆箱函数转化为目标 String 类型字符串
-			// 这样设计主要为了语言互操作性 C# 的 object、JS 的 Object、C++ 的 IInspectable 可以相互转换
-			//使用 unbox_value<T>()	从 IInspectable 提取具体类型
-			hstring tag = unbox_value<hstring>(args.InvokedItemContainer().Tag());
-			if (tag == L"home")
-				openHomePage();
-			else if (tag == L"fundamentals")
-			{
-				openFundamentalsPage();
+			// 设置导航栏高亮
+			for (auto const& item : sender.FooterMenuItems()) {
+				auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
+				if (navItem && navItem.Tag().try_as<hstring>() == L"Settings") {
+					sender.SelectedItem(navItem);
+					break;
+				}
 			}
-
+			return;
+		}
+		else if (args.InvokedItemContainer())
+		{
+			tag = unbox_value<hstring>(args.InvokedItemContainer().Tag());
+		}
+		if (tag == L"home")
+			openHomePage();
+		else if (tag == L"fundamentals")
+			openFundamentalsPage();
+		else if (tag == L"webview")
+			openWebViewPage(L"https://learn.microsoft.com/windows/apps/winui/");
+		else if (tag == L"welcome")
+			openWelcomePage();
+		else if (tag == L"Settings")
+			openSettingsPage();
+		// 设置导航栏高亮
+		for (auto const& item : sender.MenuItems()) {
+			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
+			if (navItem && navItem.Tag().try_as<hstring>() == tag) {
+				sender.SelectedItem(navItem);
+				break;
+			}
+		}
+		for (auto const& item : sender.FooterMenuItems()) {
+			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
+			if (navItem && navItem.Tag().try_as<hstring>() == tag) {
+				sender.SelectedItem(navItem);
+				break;
+			}
 		}
 	}
 
 	void MainWindow::mainFrame_Navigated(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& e)
 	{
+		// 动态高亮导航栏当前项
+		auto navView = nav();
+		hstring pageTag;
+		auto pageType = e.SourcePageType().Name;
+		if (pageType == L"HomePage") pageTag = L"home";
+		else if (pageType == L"FundamentalsPage") pageTag = L"fundamentals";
+		else if (pageType == L"WebViewPage") pageTag = L"webview";
+		else if (pageType == L"WelcomePage") pageTag = L"welcome";
+		else if (pageType == L"SettingsPage") pageTag = L"Settings";
+		for (auto const& item : navView.MenuItems()) {
+			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
+			if (navItem && navItem.Tag().try_as<hstring>() == pageTag) {
+				navView.SelectedItem(navItem);
+				break;
+			}
+		}
+		for (auto const& item : navView.FooterMenuItems()) {
+			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
+			if (navItem && navItem.Tag().try_as<hstring>() == pageTag) {
+				navView.SelectedItem(navItem);
+				break;
+			}
+		}
+		// ...原有代码...
 		if (AppTitleBar().IsBackButtonVisible())
 		{
 			HeadLogo().Margin(Thickness{0,0,8,0});
@@ -99,4 +153,27 @@ void winrt::MicrosoftDocsGallery::implementation::MainWindow::SearchBox_QuerySub
 void winrt::MicrosoftDocsGallery::implementation::MainWindow::SearchBox_TextChanged(winrt::Microsoft::UI::Xaml::Controls::AutoSuggestBox const& sender, winrt::Microsoft::UI::Xaml::Controls::AutoSuggestBoxTextChangedEventArgs const& args)
 {
 
+}
+
+void winrt::MicrosoftDocsGallery::implementation::MainWindow::SetWindowStyle()
+{
+	// 获取XAML中x:Name为 AppTitleBar 的元素，并设置为TitleBar
+	SetTitleBar(AppTitleBar());
+
+	//The icon can not be set!I dont konw why?????
+	this->AppWindow().SetIcon(L"ms-appx:///Assets/icon.ico");
+	//this->Title(L"Microsoft Docs Gallery");
+	//this->Title(winrt::Windows::ApplicationModel::Package::Current().DisplayName());
+
+	//TitleBar
+	this->ExtendsContentIntoTitleBar(true);
+	auto appWindow = this->AppWindow();
+	if (appWindow)
+	{
+		auto titleBar = appWindow.TitleBar();
+		if (titleBar)
+		{
+			titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
+		}
+	}
 }

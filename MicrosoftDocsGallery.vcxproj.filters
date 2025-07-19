@@ -238,6 +238,9 @@
     <Image Include="Assets\ModelIcons\GitHub.light.svg">
       <Filter>Assets\ModelIcons</Filter>
     </Image>
+    <Image Include="Assets\icon.ico">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />

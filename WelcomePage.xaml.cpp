@@ -3,7 +3,7 @@
 #if __has_include("WelcomePage.g.cpp")
 #include "WelcomePage.g.cpp"
 #endif
-
+#include "MainWindow.xaml.h"
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
 
@@ -16,4 +16,14 @@ namespace winrt::MicrosoftDocsGallery::implementation
 	{
 
 	}
+
+    void WelcomePage::StartButton_Click(Windows::Foundation::IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs const& e)
+    {
+        // 获取主窗口并跳转到首页
+        auto window = Microsoft::UI::Xaml::Window::Current().try_as<winrt::MicrosoftDocsGallery::MainWindow>();
+        if (window)
+        {
+            window.as<winrt::MicrosoftDocsGallery::implementation::MainWindow>()->openHomePage();
+        }
+    }
 }

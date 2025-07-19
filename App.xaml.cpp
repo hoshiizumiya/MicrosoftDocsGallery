@@ -40,16 +40,11 @@ namespace winrt::MicrosoftDocsGallery::implementation
     {
         window = make<MainWindow>();
         window.Activate();
-        window.ExtendsContentIntoTitleBar(true);
-        auto appWindow = window.AppWindow();
-        if (appWindow)
+        // 首次启动显示欢迎页
+        auto mainWindow = window.as<winrt::MicrosoftDocsGallery::implementation::MainWindow>();
+        if (mainWindow)
         {
-            auto titleBar = appWindow.TitleBar();
-            if (titleBar)
-            {
-                titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
-            }
+            mainWindow->openWelcomePage();
         }
-
     }
 }

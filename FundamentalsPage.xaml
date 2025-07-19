@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="MicrosoftDocsGallery.FundamentalsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,6 +9,11 @@
     mc:Ignorable="d">
 
     <Grid>
-
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
+            <TextBlock Text="文档基础分类" FontSize="24" FontWeight="Bold"/>
+            <Button Content="WinUI3 入门" Width="200" Height="40"/>
+            <Button Content="C# 基础" Width="200" Height="40"/>
+            <Button Content=".NET API" Width="200" Height="40"/>
+        </StackPanel>
     </Grid>
 </Page>

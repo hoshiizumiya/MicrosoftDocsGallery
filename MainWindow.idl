@@ -4,5 +4,10 @@
     runtimeclass MainWindow : Microsoft.UI.Xaml.Window
     {
         MainWindow();
+        void openHomePage();
+        void openFundamentalsPage();
+        void openSettingsPage();
+        void openWebViewPage(String url);
+        void openWelcomePage();
     }
 }
