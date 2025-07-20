@@ -1,10 +1,12 @@
 ﻿#include "pch.h"
 #include "App.xaml.h"
 #include "MainWindow.xaml.h"
-#include <winrt/Microsoft.UI.Windowing.h>
+#include <winrt/Windows.Globalization.h>
+#include <winrt/Microsoft.UI.Xaml.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
+using namespace Windows::Globalization;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -30,6 +32,10 @@ namespace winrt::MicrosoftDocsGallery::implementation
             }
         });
 #endif
+        // 设置默认语言为英语
+        if (ApplicationLanguages::PrimaryLanguageOverride().empty()) {
+            ApplicationLanguages::PrimaryLanguageOverride(L"en-US");
+        }
     }
 
     /// <summary>

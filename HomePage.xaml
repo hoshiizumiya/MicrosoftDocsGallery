@@ -29,13 +29,15 @@
                 HorizontalContentAlignment="Center"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <!--  所有的子项会横向排列  -->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
+                <!--  用 ItemTemplate 可以让你只写一次“样式模板”，数据多少都能自动套用。BUG :image 和 textblock 绑定了同样的内容  -->
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="x:String">
                         <Border
                             Width="180"
                             Height="120"
@@ -43,11 +45,22 @@
                             Background="#FFEDF2FB"
                             CornerRadius="12">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <!--  修复：TextBlock 没有 Background 属性，若要显示图片背景，请将 Image 放在 Border 内部  -->
+                                <Image
+                                    Width="180"
+                                    Height="120"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
+                                    Opacity="0.3"
+                                    Source="{x:Bind}"
+                                    Stretch="UniformToFill" />
                                 <TextBlock
                                     HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
                                     FontSize="20"
                                     FontWeight="SemiBold"
-                                    Text="{Binding }" />
+                                    Text="{x:Bind}" />
                             </StackPanel>
                         </Border>
                     </DataTemplate>

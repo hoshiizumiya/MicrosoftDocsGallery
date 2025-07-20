@@ -10,9 +10,16 @@
 
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
-            <TextBlock Text="设置" FontSize="24" FontWeight="Bold"/>
-            <ToggleSwitch Header="深色模式"/>
-            <Slider Header="字体大小" Minimum="12" Maximum="32" Value="16" Width="200"/>
+            <TextBlock x:Uid="SettingsPage_Title" Text="设置" FontSize="24" FontWeight="Bold"/>
+            <ToggleSwitch x:Uid="SettingsPage_DarkMode" Header="深色模式"/>
+            <Slider x:Uid="SettingsPage_FontSize" Header="字体大小" Minimum="12" Maximum="32" Value="16" Width="200"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock x:Uid="SettingsPage_Language" Text="语言：" VerticalAlignment="Center"/>
+                <ComboBox x:Name="LanguageComboBox" Width="120" SelectionChanged="LanguageComboBox_SelectionChanged">
+                    <ComboBoxItem Tag="en-US">English</ComboBoxItem>
+                    <ComboBoxItem Tag="zh-CN">中文</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>
