@@ -7,6 +7,10 @@
 #include "winrt/Microsoft.UI.Xaml.Controls.h"
 #include <winrt/Microsoft.UI.Windowing.h>
 #include <winrt/Windows.Graphics.h>
+#include <winrt/Microsoft.UI.Windowing.h>
+#include <winrt/microsoft.ui.interop.h>
+#include <winrt/Windows.Storage.h>
+#include <winrt/Windows.Storage.Streams.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -54,20 +58,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
 	void MainWindow::NavigationView_ItemInvoked(winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewItemInvokedEventArgs const& args)
 	{
 		hstring tag;
-		if (args.IsSettingsInvoked())
-		{
-			openSettingsPage();
-			// 设置导航栏高亮
-			for (auto const& item : sender.FooterMenuItems()) {
-				auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
-				if (navItem && navItem.Tag().try_as<hstring>() == L"Settings") {
-					sender.SelectedItem(navItem);
-					break;
-				}
-			}
-			return;
-		}
-		else if (args.InvokedItemContainer())
+
+		if (args.InvokedItemContainer())
 		{
 			tag = unbox_value<hstring>(args.InvokedItemContainer().Tag());
 		}
@@ -81,21 +73,25 @@ namespace winrt::MicrosoftDocsGallery::implementation
 			openWelcomePage();
 		else if (tag == L"Settings")
 			openSettingsPage();
-		else if (tag==L"Contribute")
+		else if (tag == L"Contribute")
 		{
 			openWebViewPage(L"https://github.com/hoshiizumiya/MicrosoftDocsGallery");
 		}
 		// 设置导航栏高亮
-		for (auto const& item : sender.MenuItems()) {
+		for (auto const& item : sender.MenuItems())
+		{
 			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
-			if (navItem && navItem.Tag().try_as<hstring>() == tag) {
+			if (navItem && navItem.Tag().try_as<hstring>() == tag)
+			{
 				sender.SelectedItem(navItem);
 				break;
 			}
 		}
-		for (auto const& item : sender.FooterMenuItems()) {
+		for (auto const& item : sender.FooterMenuItems())
+		{
 			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
-			if (navItem && navItem.Tag().try_as<hstring>() == tag) {
+			if (navItem && navItem.Tag().try_as<hstring>() == tag)
+			{
 				sender.SelectedItem(navItem);
 				break;
 			}
@@ -113,16 +109,20 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		else if (pageType == L"WebViewPage") pageTag = L"webview";
 		else if (pageType == L"WelcomePage") pageTag = L"welcome";
 		else if (pageType == L"SettingsPage") pageTag = L"Settings";
-		for (auto const& item : navView.MenuItems()) {
+		for (auto const& item : navView.MenuItems())
+		{
 			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
-			if (navItem && navItem.Tag().try_as<hstring>() == pageTag) {
+			if (navItem && navItem.Tag().try_as<hstring>() == pageTag)
+			{
 				navView.SelectedItem(navItem);
 				break;
 			}
 		}
-		for (auto const& item : navView.FooterMenuItems()) {
+		for (auto const& item : navView.FooterMenuItems())
+		{
 			auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
-			if (navItem && navItem.Tag().try_as<hstring>() == pageTag) {
+			if (navItem && navItem.Tag().try_as<hstring>() == pageTag)
+			{
 				navView.SelectedItem(navItem);
 				break;
 			}
@@ -130,7 +130,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		// ...原有代码...
 		if (AppTitleBar().IsBackButtonVisible())
 		{
-			HeadLogo().Margin(Thickness{0,0,8,0});
+			HeadLogo().Margin(Thickness{ 0,0,8,0 });
 		}
 		else
 		{
@@ -166,7 +166,9 @@ void winrt::MicrosoftDocsGallery::implementation::MainWindow::SetWindowStyle()
 	SetTitleBar(AppTitleBar());
 
 	//BUG The icon can not be set!I dont know why?????
-	this->AppWindow().SetIcon(L"ms-appx:///Assets/icon.ico");
+	//this->AppWindow().SetIcon(L"ms-appx:///Assets/icon.ico");
+	SetIconAsync(this->AppWindow());
+
 	//this->Title(L"Microsoft Docs Gallery");
 	//this->Title(winrt::Windows::ApplicationModel::Package::Current().DisplayName());
 
@@ -181,4 +183,28 @@ void winrt::MicrosoftDocsGallery::implementation::MainWindow::SetWindowStyle()
 			titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
 		}
 	}
+	
+}
+
+//启动异常 BUG: 像是异步导致的原因，启动卡半天
+Windows::Foundation::IAsyncAction winrt::MicrosoftDocsGallery::implementation::MainWindow::SetIconAsync(Microsoft::UI::Windowing::AppWindow const& window)
+{
+	using namespace Windows::Storage;
+	using namespace Windows::Foundation;
+	using namespace Microsoft::UI::Windowing;
+
+	Uri uri{ L"ms-appx:///Assets/icon.ico" };
+	try
+	{
+		StorageFile storageFile = co_await StorageFile::GetFileFromApplicationUriAsync(uri);
+		if (storageFile)
+		{
+			window.SetIcon(storageFile.Path().c_str());
+		}
+	}
+	catch (...)
+	{
+		// Failed to load icon, use default or ignore
+	}
+
 }

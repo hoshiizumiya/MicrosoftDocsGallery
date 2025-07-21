@@ -41,7 +41,7 @@
                         <Border
                             Width="180"
                             Height="120"
-                            Margin="8"
+                            Margin="8,20,0,0"
                             Background="#FFEDF2FB"
                             CornerRadius="12">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

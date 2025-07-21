@@ -21,6 +21,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		void SearchBox_QuerySubmitted(winrt::Microsoft::UI::Xaml::Controls::AutoSuggestBox const& sender, winrt::Microsoft::UI::Xaml::Controls::AutoSuggestBoxQuerySubmittedEventArgs const& args);
 		void SearchBox_TextChanged(winrt::Microsoft::UI::Xaml::Controls::AutoSuggestBox const& sender, winrt::Microsoft::UI::Xaml::Controls::AutoSuggestBoxTextChangedEventArgs const& args);
 		void SetWindowStyle();
+
+		Windows::Foundation::IAsyncAction SetIconAsync(Microsoft::UI::Windowing::AppWindow const& window);
 	};
 }
 
