@@ -34,7 +34,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="MicrosoftDocsGallery"
+        DisplayName="Microsoft Docs Gallery"
         Description="MicrosoftDocsGallery"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Icons\Square150x150Logo.png"

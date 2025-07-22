@@ -3,6 +3,10 @@
 #include "MainWindow.xaml.h"
 #include <winrt/Windows.Globalization.h>
 #include <winrt/Microsoft.UI.Xaml.h>
+#include <winrt/Microsoft.UI.Windowing.h>
+#include <winrt/microsoft.ui.interop.h>
+#include <winrt/Windows.Storage.h>
+#include <winrt/Windows.Storage.Streams.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -45,6 +49,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
     void App::OnLaunched([[maybe_unused]] LaunchActivatedEventArgs const& e)
     {
         window = make<MainWindow>();
+        SetWindowStyle(window);
         window.Activate();
         // 首次启动显示欢迎页
         auto mainWindow = window.as<winrt::MicrosoftDocsGallery::implementation::MainWindow>();
@@ -52,5 +57,51 @@ namespace winrt::MicrosoftDocsGallery::implementation
         {
             mainWindow->openWelcomePage();
         }
+    }
+
+
+    Windows::Foundation::IAsyncAction App::SetWindowStyle(Window window)
+    {
+        auto appWindow = window.AppWindow();
+
+        //BUG The icon can not be set!I dont know why?????
+        //appWindow.SetIcon(L"ms-appx:///Assets/icon.ico");
+        co_await SetIconAsync(appWindow);
+
+        //this->Title(L"Microsoft Docs Gallery");
+        //this->Title(winrt::Windows::ApplicationModel::Package::Current().DisplayName());
+
+        window.ExtendsContentIntoTitleBar(true);
+        if (appWindow)
+        {
+            auto titleBar = appWindow.TitleBar();
+            if (titleBar)
+            {
+                titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
+            }
+        }
+
+    }
+
+    Windows::Foundation::IAsyncAction App::SetIconAsync(Microsoft::UI::Windowing::AppWindow window)
+    {
+        using namespace Windows::Storage;
+        using namespace Windows::Foundation;
+        using namespace Microsoft::UI::Windowing;
+
+        Uri uri{ L"ms-appx:///Assets/icon.ico" };
+        try
+        {
+            StorageFile storageFile = co_await StorageFile::GetFileFromApplicationUriAsync(uri);
+            if (storageFile)
+            {
+                window.SetIcon(storageFile.Path());
+            }
+        }
+        catch (...)
+        {
+            // Failed to load icon, use default or ignore
+        }
+
     }
 }

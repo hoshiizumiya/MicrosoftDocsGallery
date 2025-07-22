@@ -7,10 +7,6 @@
 #include "winrt/Microsoft.UI.Xaml.Controls.h"
 #include <winrt/Microsoft.UI.Windowing.h>
 #include <winrt/Windows.Graphics.h>
-#include <winrt/Microsoft.UI.Windowing.h>
-#include <winrt/microsoft.ui.interop.h>
-#include <winrt/Windows.Storage.h>
-#include <winrt/Windows.Storage.Streams.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -23,7 +19,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 	MainWindow::MainWindow()
 	{
 		InitializeComponent();
-		SetWindowStyle();
+		SetTitleBar(AppTitleBar());
 	}
 
 	//void NavigateToPage()
@@ -48,11 +44,6 @@ namespace winrt::MicrosoftDocsGallery::implementation
 	void MainWindow::openWelcomePage()
 	{
 		mainFrame().Navigate(xaml_typename<WelcomePage>());
-	}
-
-	void MainWindow::Page_Loaded(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
-	{
-		openHomePage();
 	}
 
 	void MainWindow::NavigationView_ItemInvoked(winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewItemInvokedEventArgs const& args)
@@ -160,51 +151,7 @@ void winrt::MicrosoftDocsGallery::implementation::MainWindow::SearchBox_TextChan
 
 }
 
-void winrt::MicrosoftDocsGallery::implementation::MainWindow::SetWindowStyle()
+void winrt::MicrosoftDocsGallery::implementation::MainWindow::Grid_Loaded(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
 {
-	// 获取XAML中x:Name为 AppTitleBar 的元素，并设置为TitleBar
-	SetTitleBar(AppTitleBar());
-
-	//BUG The icon can not be set!I dont know why?????
-	//this->AppWindow().SetIcon(L"ms-appx:///Assets/icon.ico");
-	SetIconAsync(this->AppWindow());
-
-	//this->Title(L"Microsoft Docs Gallery");
-	//this->Title(winrt::Windows::ApplicationModel::Package::Current().DisplayName());
-
-	//TitleBar
-	this->ExtendsContentIntoTitleBar(true);
-	auto appWindow = this->AppWindow();
-	if (appWindow)
-	{
-		auto titleBar = appWindow.TitleBar();
-		if (titleBar)
-		{
-			titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
-		}
-	}
-	
-}
-
-//启动异常 BUG: 像是异步导致的原因，启动卡半天
-Windows::Foundation::IAsyncAction winrt::MicrosoftDocsGallery::implementation::MainWindow::SetIconAsync(Microsoft::UI::Windowing::AppWindow const& window)
-{
-	using namespace Windows::Storage;
-	using namespace Windows::Foundation;
-	using namespace Microsoft::UI::Windowing;
-
-	Uri uri{ L"ms-appx:///Assets/icon.ico" };
-	try
-	{
-		StorageFile storageFile = co_await StorageFile::GetFileFromApplicationUriAsync(uri);
-		if (storageFile)
-		{
-			window.SetIcon(storageFile.Path().c_str());
-		}
-	}
-	catch (...)
-	{
-		// Failed to load icon, use default or ignore
-	}
 
 }

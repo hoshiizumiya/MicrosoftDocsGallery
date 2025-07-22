@@ -9,6 +9,5 @@
         void openSettingsPage();
         void openWebViewPage(String url);
         void openWelcomePage();
-        void SetWindowStyle();
     }
 }
