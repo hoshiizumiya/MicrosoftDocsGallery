@@ -5,9 +5,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xaml" />
-    <Page Include="WelcomePage.xaml">
-      <Filter>Pages</Filter>
-    </Page>
     <Page Include="HomePage.xaml">
       <Filter>Pages</Filter>
     </Page>
@@ -239,6 +236,9 @@
       <Filter>Assets\ModelIcons</Filter>
     </Image>
     <Image Include="Assets\icon.ico">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\msdn.ico">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>

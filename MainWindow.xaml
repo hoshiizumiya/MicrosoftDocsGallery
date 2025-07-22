@@ -12,7 +12,7 @@
     <Window.SystemBackdrop>
         <MicaBackdrop />
     </Window.SystemBackdrop>
-    <Grid Loaded="Grid_Loaded">
+    <Grid>
 
         <Grid.RowDefinitions>
             <!--  TitleBar and NavView  -->
@@ -48,7 +48,7 @@
                         <FontIcon Glyph="&#xE728;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Welcome" Tag="welcome">
+                <NavigationViewItem Content="DEBUGDEBUGDEBUG" Tag="welcome">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xF133;" />
                     </NavigationViewItem.Icon>

@@ -8,6 +8,6 @@
         void openFundamentalsPage();
         void openSettingsPage();
         void openWebViewPage(String url);
-        void openWelcomePage();
+        Windows.Foundation.IAsyncAction SetIconAsync(Microsoft.UI.Windowing.AppWindow window);
     }
 }

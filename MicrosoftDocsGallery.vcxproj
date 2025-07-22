@@ -130,10 +130,6 @@
       <DependentUpon>WebViewPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="WelcomePage.xaml.h">
-      <DependentUpon>WelcomePage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
@@ -149,9 +145,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WebViewPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="WelcomePage.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
@@ -182,10 +175,6 @@
       <DependentUpon>WebViewPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="WelcomePage.xaml.cpp">
-      <DependentUpon>WelcomePage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="FundamentalsPage.idl">
@@ -206,10 +195,6 @@
     </Midl>
     <Midl Include="WebViewPage.idl">
       <DependentUpon>WebViewPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Midl>
-    <Midl Include="WelcomePage.idl">
-      <DependentUpon>WelcomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
   </ItemGroup>
@@ -245,6 +230,10 @@
     </Image>
     <Image Include="Assets\ModelIcons\GitHub.light.svg">
       <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </Image>
+    <Image Include="Assets\msdn.ico">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </Image>

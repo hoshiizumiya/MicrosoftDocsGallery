@@ -5,8 +5,9 @@
 #endif
 #include <winrt/Windows.UI.Xaml.Interop.h>
 #include "winrt/Microsoft.UI.Xaml.Controls.h"
-#include <winrt/Microsoft.UI.Windowing.h>
 #include <winrt/Windows.Graphics.h>
+#include <winrt/Windows.Storage.h>
+#include <winrt/Windows.Foundation.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -41,10 +42,6 @@ namespace winrt::MicrosoftDocsGallery::implementation
 	{
 		mainFrame().Navigate(xaml_typename<WebViewPage>(), box_value(url));
 	}
-	void MainWindow::openWelcomePage()
-	{
-		mainFrame().Navigate(xaml_typename<WelcomePage>());
-	}
 
 	void MainWindow::NavigationView_ItemInvoked(winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewItemInvokedEventArgs const& args)
 	{
@@ -60,8 +57,6 @@ namespace winrt::MicrosoftDocsGallery::implementation
 			openFundamentalsPage();
 		else if (tag == L"webview")
 			openWebViewPage(L"https://learn.microsoft.com/windows/apps/winui/");
-		else if (tag == L"welcome")
-			openWelcomePage();
 		else if (tag == L"Settings")
 			openSettingsPage();
 		else if (tag == L"Contribute")
@@ -118,8 +113,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
 				break;
 			}
 		}
-		// ...原有代码...
-		if (AppTitleBar().IsBackButtonVisible())
+		// 只设置 HeadLogo 的 Margin，不再手动设置 IsBackButtonVisible
+		if (mainFrame().CanGoBack())
 		{
 			HeadLogo().Margin(Thickness{ 0,0,8,0 });
 		}
@@ -134,10 +129,39 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		if (mainFrame().CanGoBack())
 		{
 			mainFrame().GoBack();
+			// 强制刷新导航栏选中项
+			if (mainFrame().Content())
+			{
+				// 通过 RTTI 获取当前页面类型名
+				std::wstring_view typeName = winrt::to_hstring(winrt::get_class_name(mainFrame().Content()));
+				hstring pageTag;
+				if (typeName.find(L"HomePage") != std::wstring_view::npos) pageTag = L"home";
+				else if (typeName.find(L"FundamentalsPage") != std::wstring_view::npos) pageTag = L"fundamentals";
+				else if (typeName.find(L"WebViewPage") != std::wstring_view::npos) pageTag = L"webview";
+				else if (typeName.find(L"WelcomePage") != std::wstring_view::npos) pageTag = L"welcome";
+				else if (typeName.find(L"SettingsPage") != std::wstring_view::npos) pageTag = L"Settings";
+				auto navView = nav();
+				for (auto const& item : navView.MenuItems())
+				{
+					auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
+					if (navItem && navItem.Tag().try_as<hstring>() == pageTag)
+					{
+						navView.SelectedItem(navItem);
+						break;
+					}
+				}
+				for (auto const& item : navView.FooterMenuItems())
+				{
+					auto navItem = item.try_as<winrt::Microsoft::UI::Xaml::Controls::NavigationViewItem>();
+					if (navItem && navItem.Tag().try_as<hstring>() == pageTag)
+					{
+						navView.SelectedItem(navItem);
+						break;
+					}
+				}
+			}
 		}
 	}
-
-
 
 }
 
@@ -151,7 +175,26 @@ void winrt::MicrosoftDocsGallery::implementation::MainWindow::SearchBox_TextChan
 
 }
 
-void winrt::MicrosoftDocsGallery::implementation::MainWindow::Grid_Loaded(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
+winrt::Windows::Foundation::IAsyncAction winrt::MicrosoftDocsGallery::implementation::MainWindow::SetIconAsync(winrt::Microsoft::UI::Windowing::AppWindow window)
 {
+	if (!window) co_return;
+	using namespace Windows::Storage;
+	using namespace Windows::Foundation;
+	using namespace Microsoft::UI::Windowing;
+	Uri uri{ L"ms-appx:///Assets/msdn.ico" };
+	try
+	{
+		StorageFile storageFile = co_await StorageFile::GetFileFromApplicationUriAsync(uri);
+		if (storageFile)
+		{
+			window.SetIcon(storageFile.Path());
+			OutputDebugString((L"Set icon path: " + storageFile.Path() + L"\n").c_str());
 
+		}
+	}
+	catch (...)
+	{
+		// Failed to load icon, use default or ignore
+		OutputDebugString(L"Failed to set icon.\n");
+	}
 }

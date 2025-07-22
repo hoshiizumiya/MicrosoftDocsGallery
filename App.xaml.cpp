@@ -3,17 +3,33 @@
 #include "MainWindow.xaml.h"
 #include <winrt/Windows.Globalization.h>
 #include <winrt/Microsoft.UI.Xaml.h>
+#include <winrt/Windows.Foundation.h>
 #include <winrt/Microsoft.UI.Windowing.h>
-#include <winrt/microsoft.ui.interop.h>
-#include <winrt/Windows.Storage.h>
-#include <winrt/Windows.Storage.Streams.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
 using namespace Windows::Globalization;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+
+void InitWindowStyle(winrt::Microsoft::UI::Xaml::Window const& window)
+{
+    window.ExtendsContentIntoTitleBar(true);
+    auto appWindow = window.AppWindow();
+    if (appWindow)
+    {
+        auto titleBar = appWindow.TitleBar();
+        if (titleBar)
+        {
+            titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
+        }
+        // 设置窗口图标（异步 fire-and-forget）
+        auto mainWindow = window.as<winrt::MicrosoftDocsGallery::MainWindow>();
+        if (mainWindow)
+        {
+            mainWindow.SetIconAsync(appWindow);
+        }
+    }
+}
 
 namespace winrt::MicrosoftDocsGallery::implementation
 {
@@ -49,59 +65,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
     void App::OnLaunched([[maybe_unused]] LaunchActivatedEventArgs const& e)
     {
         window = make<MainWindow>();
-        SetWindowStyle(window);
+        InitWindowStyle(window);
         window.Activate();
-        // 首次启动显示欢迎页
-        auto mainWindow = window.as<winrt::MicrosoftDocsGallery::implementation::MainWindow>();
-        if (mainWindow)
-        {
-            mainWindow->openWelcomePage();
-        }
-    }
-
-
-    Windows::Foundation::IAsyncAction App::SetWindowStyle(Window window)
-    {
-        auto appWindow = window.AppWindow();
-
-        //BUG The icon can not be set!I dont know why?????
-        //appWindow.SetIcon(L"ms-appx:///Assets/icon.ico");
-        co_await SetIconAsync(appWindow);
-
-        //this->Title(L"Microsoft Docs Gallery");
-        //this->Title(winrt::Windows::ApplicationModel::Package::Current().DisplayName());
-
-        window.ExtendsContentIntoTitleBar(true);
-        if (appWindow)
-        {
-            auto titleBar = appWindow.TitleBar();
-            if (titleBar)
-            {
-                titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
-            }
-        }
-
-    }
-
-    Windows::Foundation::IAsyncAction App::SetIconAsync(Microsoft::UI::Windowing::AppWindow window)
-    {
-        using namespace Windows::Storage;
-        using namespace Windows::Foundation;
-        using namespace Microsoft::UI::Windowing;
-
-        Uri uri{ L"ms-appx:///Assets/icon.ico" };
-        try
-        {
-            StorageFile storageFile = co_await StorageFile::GetFileFromApplicationUriAsync(uri);
-            if (storageFile)
-            {
-                window.SetIcon(storageFile.Path());
-            }
-        }
-        catch (...)
-        {
-            // Failed to load icon, use default or ignore
-        }
-
     }
 }
