@@ -181,7 +181,7 @@ winrt::Windows::Foundation::IAsyncAction winrt::MicrosoftDocsGallery::implementa
 	using namespace Windows::Storage;
 	using namespace Windows::Foundation;
 	using namespace Microsoft::UI::Windowing;
-	Uri uri{ L"ms-appx:///Assets/msdn.ico" };
+	Uri uri{ L"/Assets/msdn.ico" };
 	try
 	{
 		StorageFile storageFile = co_await StorageFile::GetFileFromApplicationUriAsync(uri);
@@ -196,5 +196,26 @@ winrt::Windows::Foundation::IAsyncAction winrt::MicrosoftDocsGallery::implementa
 	{
 		// Failed to load icon, use default or ignore
 		OutputDebugString(L"Failed to set icon.\n");
+	}
+}
+
+
+void winrt::MicrosoftDocsGallery::implementation::MainWindow::InitWindowStyle(winrt::Microsoft::UI::Xaml::Window const& window)
+{
+	window.ExtendsContentIntoTitleBar(true);
+	auto appWindow = window.AppWindow();
+	if (appWindow)
+	{
+		auto titleBar = appWindow.TitleBar();
+		if (titleBar)
+		{
+			titleBar.PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
+		}
+		// 设置窗口图标（异步 fire-and-forget）
+		auto mainWindow = window.as<winrt::MicrosoftDocsGallery::MainWindow>();
+		if (mainWindow)
+		{
+			mainWindow.SetIconAsync(appWindow);
+		}
 	}
 }

@@ -23,13 +23,22 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
+    <Midl Include="Helpers\NavItemIconHelper.idl">
+      <Filter>Helpers</Filter>
+    </Midl>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -46,6 +55,9 @@
     </Filter>
     <Filter Include="Assets\ModelIcons">
       <UniqueIdentifier>{ac36d242-c641-49e0-a079-d8c0f54aae07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{ef9f13fd-35d4-47b7-abbe-210e5171d4ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
