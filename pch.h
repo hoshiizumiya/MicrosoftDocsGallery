@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <windows.h>
 #include <unknwn.h>
 #include <restrictederrorinfo.h>
@@ -8,6 +8,7 @@
 // conflict with Storyboard::GetCurrentTime
 #undef GetCurrentTime
 
+// WinUI 3 / Microsoft.UI 命名空间 - 正确的命名空间
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.ApplicationModel.Activation.h>
@@ -22,4 +23,13 @@
 #include <winrt/Microsoft.UI.Xaml.Navigation.h>
 #include <winrt/Microsoft.UI.Xaml.Shapes.h>
 #include <winrt/Microsoft.UI.Dispatching.h>
+#include <winrt/Microsoft.UI.Windowing.h>
+
+// Windows 运行时服务
+#include <winrt/Windows.Storage.h>
+#include <winrt/Windows.Globalization.h>
+#include <winrt/Windows.Web.Http.h>
+#include <winrt/Windows.Data.Json.h>
+
+// WIL helpers
 #include <wil/cppwinrt_helpers.h>

@@ -8,12 +8,49 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
-            <TextBlock Text="文档基础分类" FontSize="24" FontWeight="Bold"/>
-            <Button Content="WinUI3 入门" Width="200" Height="40"/>
-            <Button Content="C# 基础" Width="200" Height="40"/>
-            <Button Content=".NET API" Width="200" Height="40"/>
+    <Grid Margin="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 页面标题 -->
+        <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,24">
+            <TextBlock Text="文档基础分类" FontSize="32" FontWeight="Bold"/>
+            <TextBlock Text="选择一个主题开始学习Microsoft技术" 
+                       FontSize="16" 
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
         </StackPanel>
+
+        <!-- 过滤和搜索 -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="16" Margin="0,0,0,24">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="分类：" VerticalAlignment="Center"/>
+                <ComboBox x:Name="CategoryFilterComboBox" 
+                          Width="150" 
+                          SelectionChanged="CategoryFilter_SelectionChanged">
+                    <ComboBoxItem Tag="All" IsSelected="True">全部</ComboBoxItem>
+                    <ComboBoxItem Tag="WinUI">WinUI</ComboBoxItem>
+                    <ComboBoxItem Tag="DotNet">.NET</ComboBoxItem>
+                    <ComboBoxItem Tag="CSharp">C#</ComboBoxItem>
+                    <ComboBoxItem Tag="Azure">Azure</ComboBoxItem>
+                    <ComboBoxItem Tag="WebDev">Web开发</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            
+            <TextBox x:Name="SearchBox" 
+                     PlaceholderText="搜索主题..." 
+                     Width="250"
+                     TextChanged="SearchBox_TextChanged"/>
+        </StackPanel>
+
+        <!-- 主题网格 -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <GridView x:Name="TopicsGridView" 
+                      SelectionMode="None">
+                <!-- ItemsSource和ItemTemplate在代码中动态设置 -->
+            </GridView>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -26,6 +26,3 @@ namespace winrt::MicrosoftDocsGallery::Helpers::factory_implementation
 {
     struct NavItemIconHelper : NavItemIconHelperT<NavItemIconHelper, implementation::NavItemIconHelper> {};
 }
-
-// 显式声明空的 implementation 命名空间，防止自动生成代码报错
-namespace winrt::MicrosoftDocsGallery::Helpers::implementation {}

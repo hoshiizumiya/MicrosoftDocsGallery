@@ -1,0 +1,21 @@
+﻿namespace MicrosoftDocsGallery
+{
+    [default_interface]
+    runtimeclass FavoritesPage : Microsoft.UI.Xaml.Controls.Page
+    {
+        FavoritesPage();
+        
+        // 收藏夹管理方法
+        void AddToFavorites(String url, String title);
+        void RemoveFromFavorites(String url);
+        void ClearAllFavorites();
+        Boolean IsInFavorites(String url);
+        
+        // 事件处理器
+        void FavoriteItem_Click(Object sender, Microsoft.UI.Xaml.RoutedEventArgs e);
+        void RemoveFavorite_Click(Object sender, Microsoft.UI.Xaml.RoutedEventArgs e);
+        void SearchBox_TextChanged(Object sender, Microsoft.UI.Xaml.Controls.TextChangedEventArgs e);
+        void CategoryFilter_SelectionChanged(Object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e);
+        void SortBy_SelectionChanged(Object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e);
+    }
+}

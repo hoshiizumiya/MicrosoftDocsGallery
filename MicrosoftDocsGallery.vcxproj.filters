@@ -20,12 +20,14 @@
     <Page Include="Styles\NavigationView.xaml">
       <Filter>Styles</Filter>
     </Page>
+    <Page Include="FavoritesPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
     <Midl Include="Helpers\NavItemIconHelper.idl">
       <Filter>Helpers</Filter>
     </Midl>
+    <Midl Include="FavoritesPage.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -39,6 +41,7 @@
     <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="AppState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
