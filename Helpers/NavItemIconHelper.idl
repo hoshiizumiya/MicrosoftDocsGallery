@@ -1,5 +1,6 @@
 ﻿namespace MicrosoftDocsGallery.Helpers
 {
+    [bindable]
     [default_interface]
     runtimeclass NavItemIconHelper
     {

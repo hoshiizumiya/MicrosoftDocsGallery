@@ -607,6 +607,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="TabNavigation" Value="Once" />
         <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="NavigationViewItem">

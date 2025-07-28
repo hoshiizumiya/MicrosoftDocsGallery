@@ -23,22 +23,16 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
-    <Midl Include="Helpers\NavItemIconHelper.idl">
-      <Filter>Helpers</Filter>
-    </Midl>
+    <Midl Include="Helpers\NavItemIconHelper.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
-      <Filter>Helpers</Filter>
-    </ClCompile>
+    <ClCompile Include="Helpers\NavItemIconHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
+    <ClInclude Include="Helpers\NavItemIconHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -253,9 +247,5 @@
     <Image Include="Assets\msdn.ico">
       <Filter>Assets</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
   </ItemGroup>
 </Project>
