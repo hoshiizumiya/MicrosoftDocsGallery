@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "Helpers.NavItemIconHelper.g.h"
+#include "Helpers/NavItemIconHelper.g.h"
 
-namespace winrt::MicrosoftDocsGallery::Helpers::implementation
+namespace winrt::MicrosoftDocsGallery::Helper::implementation
 {
     struct NavItemIconHelper : NavItemIconHelperT<NavItemIconHelper>
     {
@@ -22,7 +22,7 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
     };
 }
 
-namespace winrt::MicrosoftDocsGallery::Helpers::factory_implementation
+namespace winrt::MicrosoftDocsGallery::factory_implementation
 {
     struct NavItemIconHelper : NavItemIconHelperT<NavItemIconHelper, implementation::NavItemIconHelper> {};
 }

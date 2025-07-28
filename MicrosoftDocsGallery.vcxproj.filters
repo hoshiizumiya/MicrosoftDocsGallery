@@ -24,24 +24,24 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
+    <Midl Include="FavoritesPage.idl" />
     <Midl Include="Helpers\NavItemIconHelper.idl">
       <Filter>Helpers</Filter>
     </Midl>
-    <Midl Include="FavoritesPage.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
+    <ClCompile Include="Helpers\NavItemIconHelper.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
+    <ClInclude Include="AppState.h" />
+    <ClInclude Include="Helpers\NavItemIconHelper.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="AppState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
