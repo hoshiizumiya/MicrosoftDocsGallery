@@ -1,16 +1,10 @@
 ﻿#include "pch.h"
 #include "App.xaml.h"
 #include "MainWindow.xaml.h"
-#include <winrt/Windows.Globalization.h>
-#include <winrt/Microsoft.UI.Xaml.h>
-#include <winrt/Windows.Foundation.h>
-#include <winrt/Microsoft.UI.Windowing.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
 using namespace Windows::Globalization;
-
-
 
 namespace winrt::MicrosoftDocsGallery::implementation
 {
@@ -46,8 +40,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
     void App::OnLaunched([[maybe_unused]] LaunchActivatedEventArgs const& e)
     {
         window = make<MainWindow>();
-        auto mainWindow = window.as<winrt::MicrosoftDocsGallery::MainWindow>();
-        mainWindow.InitWindowStyle(window);
+        
+        // 在WinUI 3中，直接调用Activate()
         window.Activate();
     }
 }

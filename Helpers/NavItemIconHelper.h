@@ -21,24 +21,6 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
         static winrt::Microsoft::UI::Xaml::Visibility GetStaticIconVisibility(winrt::Microsoft::UI::Xaml::DependencyObject const& obj);
         static void SetStaticIconVisibility(winrt::Microsoft::UI::Xaml::DependencyObject const& obj, winrt::Microsoft::UI::Xaml::Visibility const& value);
 
-    private:
-        static winrt::Microsoft::UI::Xaml::DependencyProperty s_selectedIconProperty;
-        static winrt::Microsoft::UI::Xaml::DependencyProperty s_showNotificationDotProperty;
-        static winrt::Microsoft::UI::Xaml::DependencyProperty s_unselectedIconProperty;
-        static winrt::Microsoft::UI::Xaml::DependencyProperty s_staticIconVisibilityProperty;
-
-        static void OnSelectedIconChanged(
-            winrt::Microsoft::UI::Xaml::DependencyObject const& d,
-            winrt::Microsoft::UI::Xaml::DependencyPropertyChangedEventArgs const& e);
-        static void OnShowNotificationDotChanged(
-            winrt::Microsoft::UI::Xaml::DependencyObject const& d,
-            winrt::Microsoft::UI::Xaml::DependencyPropertyChangedEventArgs const& e);
-        static void OnUnselectedIconChanged(
-            winrt::Microsoft::UI::Xaml::DependencyObject const& d,
-            winrt::Microsoft::UI::Xaml::DependencyPropertyChangedEventArgs const& e);
-        static void OnStaticIconVisibilityChanged(
-            winrt::Microsoft::UI::Xaml::DependencyObject const& d,
-            winrt::Microsoft::UI::Xaml::DependencyPropertyChangedEventArgs const& e);
     };
 }
 

@@ -8,8 +8,23 @@
         void openFundamentalsPage();
         void openSettingsPage();
         void openWebViewPage(String url);
+        void openFavoritesPage();
         Windows.Foundation.IAsyncAction SetIconAsync(Microsoft.UI.Windowing.AppWindow window);
         void InitWindowStyle(Microsoft.UI.Xaml.Window window);
-
+        
+        // 窗口状态管理
+        void SaveWindowState();
+        void RestoreWindowState();
+        
+        // 收藏夹管理
+        void AddToFavorites(String url, String title);
+        void RemoveFromFavorites(String url);
+        Boolean IsInFavorites(String url);
+        
+        // 搜索功能
+        void ShowSearchSuggestions(String query);
+        
+        // 导航管理
+        void SetNavigationSelection(String pageTag);
     }
 }

@@ -8,18 +8,107 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
-            <TextBlock x:Uid="SettingsPage_Title" Text="设置" FontSize="24" FontWeight="Bold"/>
-            <ToggleSwitch x:Uid="SettingsPage_DarkMode" Header="深色模式"/>
-            <Slider x:Uid="SettingsPage_FontSize" Header="字体大小" Minimum="12" Maximum="32" Value="16" Width="200"/>
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock x:Uid="SettingsPage_Language" Text="语言：" VerticalAlignment="Center"/>
-                <ComboBox x:Name="LanguageComboBox" Width="120" SelectionChanged="LanguageComboBox_SelectionChanged">
-                    <ComboBoxItem Tag="en-US">English</ComboBoxItem>
-                    <ComboBoxItem Tag="zh-CN">中文</ComboBoxItem>
-                </ComboBox>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="40">
+        <StackPanel MaxWidth="600" Spacing="24">
+            <!-- 页面标题 -->
+            <TextBlock Text="设置" FontSize="32" FontWeight="Bold" Margin="0,0,0,16"/>
+            
+            <!-- 外观设置 -->
+            <StackPanel Spacing="16">
+                <TextBlock Text="外观" FontSize="20" FontWeight="SemiBold"/>
+                
+                <StackPanel Spacing="12" Margin="16,0,0,0">
+                    <ToggleSwitch 
+                        x:Name="DarkModeToggle" 
+                        Header="深色模式" 
+                        OnContent="开启" 
+                        OffContent="关闭"
+                        Toggled="DarkModeToggle_Toggled"/>
+                    
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="字体大小"/>
+                        <Slider 
+                            x:Name="FontSizeSlider" 
+                            Minimum="12" 
+                            Maximum="32" 
+                            Value="16" 
+                            Width="300"
+                            HorizontalAlignment="Left"
+                            ValueChanged="FontSizeSlider_ValueChanged"/>
+                        <TextBlock x:Name="FontSizeDisplay" Text="16px" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 语言设置 -->
+            <StackPanel Spacing="16">
+                <TextBlock Text="语言" FontSize="20" FontWeight="SemiBold"/>
+                
+                <StackPanel Orientation="Horizontal" Spacing="12" Margin="16,0,0,0">
+                    <TextBlock Text="界面语言：" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="LanguageComboBox" Width="150" SelectionChanged="LanguageComboBox_SelectionChanged">
+                        <ComboBoxItem Tag="en-US">English</ComboBoxItem>
+                        <ComboBoxItem Tag="zh-CN">中文（简体）</ComboBoxItem>
+                        <ComboBoxItem Tag="zh-TW">中文（繁體）</ComboBoxItem>
+                        <ComboBoxItem Tag="ja-JP">日本語</ComboBoxItem>
+                        <ComboBoxItem Tag="ko-KR">한국어</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 数据和隐私 -->
+            <StackPanel Spacing="16">
+                <TextBlock Text="数据和隐私" FontSize="20" FontWeight="SemiBold"/>
+                
+                <StackPanel Spacing="12" Margin="16,0,0,0">
+                    <Button 
+                        x:Name="ClearCacheButton"
+                        Content="清除缓存" 
+                        Width="120"
+                        HorizontalAlignment="Left"
+                        Click="ClearCacheButton_Click"/>
+                    
+                    <TextBlock 
+                        Text="清除应用程序缓存的网页数据和临时文件" 
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 关于 -->
+            <StackPanel Spacing="16">
+                <TextBlock Text="关于" FontSize="20" FontWeight="SemiBold"/>
+                
+                <StackPanel Spacing="12" Margin="16,0,0,0">
+                    <TextBlock Text="Microsoft Docs Gallery" FontWeight="SemiBold"/>
+                    <TextBlock Text="版本 1.0.0" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="一个用于浏览Microsoft文档的现代化应用程序" 
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               TextWrapping="Wrap"/>
+                    
+                    <HyperlinkButton Content="GitHub 项目主页" NavigateUri="https://github.com/hoshiizumiya/MicrosoftDocsGallery"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 重置设置 -->
+            <StackPanel Spacing="16">
+                <TextBlock Text="重置" FontSize="20" FontWeight="SemiBold"/>
+                
+                <StackPanel Spacing="12" Margin="16,0,0,0">
+                    <Button 
+                        x:Name="ResetSettingsButton"
+                        Content="重置所有设置" 
+                        Style="{ThemeResource AccentButtonStyle}"
+                        Width="140"
+                        HorizontalAlignment="Left"
+                        Click="ResetSettingsButton_Click"/>
+                    
+                    <TextBlock 
+                        Text="将所有设置恢复到默认值" 
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Page>

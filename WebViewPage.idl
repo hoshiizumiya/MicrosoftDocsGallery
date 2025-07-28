@@ -4,5 +4,19 @@
     runtimeclass WebViewPage : Microsoft.UI.Xaml.Controls.Page
     {
         WebViewPage();
+        
+        // TabView 相关方法
+        void AddNewTab(String url, String title);
+        void CloseTab(String tabId);
+        void SwitchToTab(String tabId);
+        void UpdateTabTitle(String tabId, String title);
+        
+        // NavigationView 目录相关
+        void LoadDocumentStructure(String url);
+        void NavigateToSection(String sectionId);
+        
+        // 页面状态保持
+        void SavePageState();
+        void RestorePageState();
     }
 }

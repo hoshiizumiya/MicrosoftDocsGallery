@@ -108,6 +108,10 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppState.h" />
+    <ClInclude Include="FavoritesPage.xaml.h">
+      <DependentUpon>FavoritesPage.xaml</DependentUpon>
+    </ClInclude>
     <ClInclude Include="FundamentalsPage.xaml.h">
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -135,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
+    <Page Include="FavoritesPage.xaml" />
     <Page Include="FundamentalsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -151,6 +156,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FavoritesPage.xaml.cpp">
+      <DependentUpon>FavoritesPage.xaml</DependentUpon>
+    </ClCompile>
     <ClCompile Include="FundamentalsPage.xaml.cpp">
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -180,6 +188,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="FavoritesPage.idl" />
     <Midl Include="FundamentalsPage.idl">
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>

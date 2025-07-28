@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="MicrosoftDocsGallery.FavoritesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MicrosoftDocsGallery"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="FavoriteCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 页面标题 -->
+        <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,24">
+            <TextBlock Text="我的收藏夹" FontSize="32" FontWeight="Bold"/>
+            <TextBlock Text="管理您收藏的文档和学习资源" 
+                       FontSize="16" 
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+        </StackPanel>
+
+        <!-- 工具栏 -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="16" Margin="0,0,0,24">
+            <!-- 搜索框 -->
+            <TextBox x:Name="SearchBox" 
+                     PlaceholderText="搜索收藏的文档..." 
+                     Width="300"
+                     TextChanged="SearchBox_TextChanged">
+                <TextBox.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="4">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <FontIcon Grid.Column="0" 
+                                                             Glyph="&#xE721;" 
+                                                             FontSize="16"
+                                                             Margin="8,0,0,0"
+                                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                                    <ScrollViewer Grid.Column="1" 
+                                                                 x:Name="ContentElement"
+                                                                 Margin="8,0,8,0"/>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ResourceDictionary>
+                </TextBox.Resources>
+            </TextBox>
+            
+            <!-- 分类筛选 -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="分类：" VerticalAlignment="Center"/>
+                <ComboBox x:Name="CategoryFilterComboBox" 
+                          Width="150" 
+                          SelectionChanged="CategoryFilter_SelectionChanged">
+                    <ComboBoxItem Tag="All" IsSelected="True">全部</ComboBoxItem>
+                    <ComboBoxItem Tag="Documentation">文档</ComboBoxItem>
+                    <ComboBoxItem Tag="Tutorial">教程</ComboBoxItem>
+                    <ComboBoxItem Tag="API">API参考</ComboBoxItem>
+                    <ComboBoxItem Tag="Sample">示例代码</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            
+            <!-- 排序选项 -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="排序：" VerticalAlignment="Center"/>
+                <ComboBox x:Name="SortByComboBox" 
+                          Width="120" 
+                          SelectionChanged="SortBy_SelectionChanged">
+                    <ComboBoxItem Tag="DateAdded" IsSelected="True">添加时间</ComboBoxItem>
+                    <ComboBoxItem Tag="Title">标题</ComboBoxItem>
+                    <ComboBoxItem Tag="Category">分类</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            
+            <!-- 清空收藏夹按钮 -->
+            <Button Content="清空收藏夹" 
+                    x:Name="ClearAllButton"
+                    Style="{StaticResource AccentButtonStyle}"
+                    Click="ClearAllFavorites"
+                    IsEnabled="False"/>
+        </StackPanel>
+
+        <!-- 收藏夹内容 -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="FavoritesContainer">
+                
+                <!-- 空状态显示 -->
+                <StackPanel x:Name="EmptyStatePanel" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Center"
+                           Spacing="16"
+                           Margin="0,100">
+                    <FontIcon Glyph="&#xE728;" 
+                             FontSize="48" 
+                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="还没有收藏的文档" 
+                              FontSize="18" 
+                              FontWeight="SemiBold"
+                              HorizontalAlignment="Center"/>
+                    <TextBlock Text="浏览文档时点击收藏按钮来添加到这里" 
+                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                              HorizontalAlignment="Center"/>
+                    <Button Content="浏览文档" 
+                           Style="{StaticResource AccentButtonStyle}"
+                           Click="BrowseDocs_Click"/>
+                </StackPanel>
+
+                <!-- 收藏夹列表 -->
+                <ListView x:Name="FavoritesListView" 
+                         SelectionMode="None"
+                         Visibility="Collapsed">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource FavoriteCardStyle}" 
+                                   HorizontalAlignment="Stretch">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- 文档图标 -->
+                                    <Border Grid.Column="0" 
+                                           Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                           CornerRadius="4"
+                                           Width="40"
+                                           Height="40"
+                                           Margin="0,0,16,0">
+                                        <FontIcon Glyph="&#xE7BE;" 
+                                                 FontSize="20"
+                                                 Foreground="White"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"/>
+                                    </Border>
+                                    
+                                    <!-- 文档信息 -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                        <TextBlock Text="{Binding Title}" 
+                                                  FontSize="16" 
+                                                  FontWeight="SemiBold"
+                                                  TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Url}" 
+                                                  FontSize="12"
+                                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                  TextTrimming="CharacterEllipsis"/>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Border Background="{ThemeResource SystemFillColorAttentionBrush}"
+                                                   CornerRadius="2"
+                                                   Padding="4,2">
+                                                <TextBlock Text="{Binding Category}" 
+                                                          FontSize="10"
+                                                          Foreground="White"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding DateAdded}" 
+                                                      FontSize="10"
+                                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
+                                    <!-- 操作按钮 -->
+                                    <Button Grid.Column="2" 
+                                           Content="&#xE8A7;" 
+                                           FontFamily="Segoe MDL2 Assets"
+                                           Style="{StaticResource SubtleButtonStyle}"
+                                           ToolTipService.ToolTip="打开文档"
+                                           Click="FavoriteItem_Click"
+                                           Tag="{Binding Url}"
+                                           Margin="8,0"/>
+                                    
+                                    <Button Grid.Column="3" 
+                                           Content="&#xE74D;" 
+                                           FontFamily="Segoe MDL2 Assets"
+                                           Style="{StaticResource SubtleButtonStyle}"
+                                           ToolTipService.ToolTip="移除收藏"
+                                           Click="RemoveFavorite_Click"
+                                           Tag="{Binding Url}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
