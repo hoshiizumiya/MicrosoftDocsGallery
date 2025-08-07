@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppState.h" />
+    <ClInclude Include="Converters\Converters.h" />
     <ClInclude Include="FavoritesPage.xaml.h">
       <DependentUpon>FavoritesPage.xaml</DependentUpon>
     </ClInclude>
@@ -116,10 +117,15 @@
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="Helpers\NavItemIconHelper.h" />
+    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h" />
     <ClInclude Include="HomePage.xaml.h">
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="Messaging\MessageBus.h" />
+    <ClInclude Include="Models\Models.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.xaml.h">
@@ -128,10 +134,14 @@
     <ClInclude Include="MainWindow.xaml.h">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Services\Services.h" />
     <ClInclude Include="SettingsPage.xaml.h">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="ViewModels\BindableBase.h" />
+    <ClInclude Include="ViewModels\FundamentalsPageViewModel.h" />
+    <ClInclude Include="ViewModels\HomePageViewModel.h" />
     <ClInclude Include="WebViewPage.xaml.h">
       <DependentUpon>WebViewPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -163,7 +173,7 @@
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="Helpers\NavItemIconHelper.cpp" />
+    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp" />
     <ClCompile Include="HomePage.xaml.cpp">
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -177,18 +187,25 @@
     <ClCompile Include="MainWindow.xaml.cpp">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </ClCompile>
-    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="SettingsPage.xaml.cpp">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
+    <ClCompile Include="ViewModels\HomePageViewModel.cpp" />
     <ClCompile Include="WebViewPage.xaml.cpp">
       <DependentUpon>WebViewPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="FavoritesPage.idl" />
+    <Midl Include="FavoritesPage.idl">
+      <DependentUpon>FavoritesPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="FundamentalsPage.idl">
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>

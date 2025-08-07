@@ -32,15 +32,25 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="Helpers\NavItemIconHelper.cpp">
+    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="ViewModels\HomePageViewModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="AppState.h" />
-    <ClInclude Include="Helpers\NavItemIconHelper.h">
+    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Converters\Converters.h" />
+    <ClInclude Include="Messaging\MessageBus.h" />
+    <ClInclude Include="Services\Services.h" />
+    <ClInclude Include="ViewModels\BindableBase.h" />
+    <ClInclude Include="ViewModels\FundamentalsPageViewModel.h" />
+    <ClInclude Include="ViewModels\HomePageViewModel.h" />
+    <ClInclude Include="Models\Models.h">
+      <Filter>Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +71,9 @@
     </Filter>
     <Filter Include="Helpers">
       <UniqueIdentifier>{ef9f13fd-35d4-47b7-abbe-210e5171d4ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models">
+      <UniqueIdentifier>{39dcff03-f907-4523-8e33-416bf058e353}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -256,5 +269,9 @@
     <Image Include="Assets\msdn.ico">
       <Filter>Assets</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
   </ItemGroup>
 </Project>
