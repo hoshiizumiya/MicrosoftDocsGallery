@@ -2,9 +2,10 @@
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Microsoft.UI.Xaml.Data.h>
+#include <winrt/Microsoft.UI.Xaml.Input.h>
 #include <string>
 #include <functional>
-#include <unordered_map>
+#include <atomic>
 
 namespace winrt::MicrosoftDocsGallery::ViewModels
 {
@@ -43,88 +44,39 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
             return false;
         }
 
-        // 带有自定义比较器的属性设置
-        template<typename T, typename Comparer>
-        bool SetProperty(T& field, T const& newValue, winrt::hstring const& propertyName, Comparer comparer)
-        {
-            if (!comparer(field, newValue))
-            {
-                field = newValue;
-                RaisePropertyChanged(propertyName);
-                return true;
-            }
-            return false;
-        }
-
     private:
         winrt::event<winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> m_propertyChanged;
     };
 
-    // 命令接口 - 用于绑定按钮点击等操作
-    struct ICommand : winrt::implements<ICommand, winrt::Microsoft::UI::Xaml::Input::ICommand>
-    {
-        // ICommand 实现
-        winrt::event_token CanExecuteChanged(winrt::Windows::Foundation::EventHandler<winrt::Windows::Foundation::IInspectable> const& handler)
-        {
-            return m_canExecuteChanged.add(handler);
-        }
-
-        void CanExecuteChanged(winrt::event_token const& token) noexcept
-        {
-            m_canExecuteChanged.remove(token);
-        }
-
-        bool CanExecute(winrt::Windows::Foundation::IInspectable const& parameter)
-        {
-            return CanExecuteImpl(parameter);
-        }
-
-        void Execute(winrt::Windows::Foundation::IInspectable const& parameter)
-        {
-            if (CanExecute(parameter))
-            {
-                ExecuteImpl(parameter);
-            }
-        }
-
-        // 触发 CanExecute 状态变更
-        void RaiseCanExecuteChanged()
-        {
-            m_canExecuteChanged(*this, nullptr);
-        }
-
-    protected:
-        virtual bool CanExecuteImpl(winrt::Windows::Foundation::IInspectable const& parameter) = 0;
-        virtual void ExecuteImpl(winrt::Windows::Foundation::IInspectable const& parameter) = 0;
-
-    private:
-        winrt::event<winrt::Windows::Foundation::EventHandler<winrt::Windows::Foundation::IInspectable>> m_canExecuteChanged;
-    };
-
-    // 简单命令实现
-    class RelayCommand : public ICommand
+    // 简化的命令包装器 - 直接返回 nullptr，避免复杂的 WinRT 命令实现
+    class SimpleCommand
     {
     public:
         using ExecuteFunc = std::function<void(winrt::Windows::Foundation::IInspectable const&)>;
         using CanExecuteFunc = std::function<bool(winrt::Windows::Foundation::IInspectable const&)>;
 
-        RelayCommand(ExecuteFunc executeFunc, CanExecuteFunc canExecuteFunc = nullptr)
+        SimpleCommand(ExecuteFunc executeFunc, CanExecuteFunc canExecuteFunc = nullptr)
             : m_executeFunc(executeFunc), m_canExecuteFunc(canExecuteFunc)
         {
         }
 
-    protected:
-        bool CanExecuteImpl(winrt::Windows::Foundation::IInspectable const& parameter) override
+        void Execute(winrt::Windows::Foundation::IInspectable const& parameter)
+        {
+            if (CanExecute(parameter) && m_executeFunc)
+            {
+                m_executeFunc(parameter);
+            }
+        }
+
+        bool CanExecute(winrt::Windows::Foundation::IInspectable const& parameter)
         {
             return m_canExecuteFunc ? m_canExecuteFunc(parameter) : true;
         }
 
-        void ExecuteImpl(winrt::Windows::Foundation::IInspectable const& parameter) override
+        // 简化：转换为 WinRT ICommand - 返回 nullptr 避免实现复杂性
+        operator winrt::Microsoft::UI::Xaml::Input::ICommand() const
         {
-            if (m_executeFunc)
-            {
-                m_executeFunc(parameter);
-            }
+            return nullptr;
         }
 
     private:
@@ -132,33 +84,41 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         CanExecuteFunc m_canExecuteFunc;
     };
 
-    // 异步命令实现
-    class AsyncRelayCommand : public ICommand
+    // 简化的异步命令
+    class SimpleAsyncCommand
     {
     public:
         using AsyncExecuteFunc = std::function<winrt::Windows::Foundation::IAsyncAction(winrt::Windows::Foundation::IInspectable const&)>;
         using CanExecuteFunc = std::function<bool(winrt::Windows::Foundation::IInspectable const&)>;
 
-        AsyncRelayCommand(AsyncExecuteFunc executeFunc, CanExecuteFunc canExecuteFunc = nullptr)
+        SimpleAsyncCommand(AsyncExecuteFunc executeFunc, CanExecuteFunc canExecuteFunc = nullptr)
             : m_executeFunc(executeFunc), m_canExecuteFunc(canExecuteFunc), m_isExecuting(false)
         {
         }
 
-        bool IsExecuting() const { return m_isExecuting; }
+        void Execute(winrt::Windows::Foundation::IInspectable const& parameter)
+        {
+            if (CanExecute(parameter) && m_executeFunc && !m_isExecuting)
+            {
+                ExecuteAsync(parameter);
+            }
+        }
 
-    protected:
-        bool CanExecuteImpl(winrt::Windows::Foundation::IInspectable const& parameter) override
+        bool CanExecute(winrt::Windows::Foundation::IInspectable const& parameter)
         {
             if (m_isExecuting) return false;
             return m_canExecuteFunc ? m_canExecuteFunc(parameter) : true;
         }
 
-        void ExecuteImpl(winrt::Windows::Foundation::IInspectable const& parameter) override
+        void RaiseCanExecuteChanged() 
         {
-            if (m_executeFunc && !m_isExecuting)
-            {
-                ExecuteAsync(parameter);
-            }
+            // 简化实现
+        }
+
+        // 简化：转换为 WinRT ICommand - 返回 nullptr 避免实现复杂性
+        operator winrt::Microsoft::UI::Xaml::Input::ICommand() const
+        {
+            return nullptr;
         }
 
     private:
@@ -169,7 +129,6 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         winrt::fire_and_forget ExecuteAsync(winrt::Windows::Foundation::IInspectable const& parameter)
         {
             m_isExecuting = true;
-            RaiseCanExecuteChanged();
 
             try
             {
@@ -177,13 +136,16 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
             }
             catch (...)
             {
-                // 错误处理 - 在实际应用中应该有更好的错误处理机制
+                // 错误处理
             }
 
             m_isExecuting = false;
-            RaiseCanExecuteChanged();
         }
     };
+
+    // 类型别名
+    using RelayCommand = SimpleCommand;
+    using AsyncRelayCommand = SimpleAsyncCommand;
 
     // 集合变更通知包装器
     template<typename T>

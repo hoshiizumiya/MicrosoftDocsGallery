@@ -191,6 +191,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Services\Services.cpp" />
     <ClCompile Include="SettingsPage.xaml.cpp">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>

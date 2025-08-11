@@ -35,6 +35,7 @@
     <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="Services\Services.cpp" />
     <ClCompile Include="ViewModels\HomePageViewModel.cpp" />
   </ItemGroup>
   <ItemGroup>

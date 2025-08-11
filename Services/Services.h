@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "Models/Models.h"
 #include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Storage.h>
 #include <winrt/Windows.Web.Http.h>
 #include <winrt/Windows.Data.Json.h>
@@ -10,24 +10,22 @@
 
 namespace winrt::MicrosoftDocsGallery::Services
 {
-    using namespace Models;
-
-    // 数据服务接口
+    // 数据服务接口 - 简化返回类型
     struct IDataService
     {
         virtual ~IDataService() = default;
-        virtual winrt::Windows::Foundation::IAsyncOperation<std::vector<LearningTopic>> GetTopicsAsync() = 0;
-        virtual winrt::Windows::Foundation::IAsyncOperation<std::vector<LearningTopic>> GetTopicsByCategoryAsync(winrt::hstring const& category) = 0;
-        virtual winrt::Windows::Foundation::IAsyncOperation<std::vector<LearningTopic>> SearchTopicsAsync(winrt::hstring const& query) = 0;
-        virtual winrt::Windows::Foundation::IAsyncAction SaveTopicAsync(LearningTopic const& topic) = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicTitlesAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicUrlsAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncAction RefreshDataAsync() = 0;
     };
 
     // 收藏夹服务接口
     struct IFavoritesService
     {
         virtual ~IFavoritesService() = default;
-        virtual winrt::Windows::Foundation::IAsyncOperation<std::vector<FavoriteItem>> GetFavoritesAsync() = 0;
-        virtual winrt::Windows::Foundation::IAsyncAction AddToFavoritesAsync(FavoriteItem const& item) = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetFavoriteUrlsAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetFavoriteTitlesAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncAction AddToFavoritesAsync(winrt::hstring const& url, winrt::hstring const& title) = 0;
         virtual winrt::Windows::Foundation::IAsyncAction RemoveFromFavoritesAsync(winrt::hstring const& url) = 0;
         virtual winrt::Windows::Foundation::IAsyncOperation<bool> IsFavoriteAsync(winrt::hstring const& url) = 0;
     };
@@ -36,10 +34,10 @@ namespace winrt::MicrosoftDocsGallery::Services
     struct ISettingsService
     {
         virtual ~ISettingsService() = default;
-        virtual winrt::Windows::Foundation::IAsyncOperation<UserPreferences> GetUserPreferencesAsync() = 0;
-        virtual winrt::Windows::Foundation::IAsyncAction SaveUserPreferencesAsync(UserPreferences const& preferences) = 0;
-        virtual winrt::Windows::Foundation::IAsyncOperation<AppStatistics> GetAppStatisticsAsync() = 0;
-        virtual winrt::Windows::Foundation::IAsyncAction UpdateAppStatisticsAsync(AppStatistics const& statistics) = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetTotalPagesViewedAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetFavoritesCountAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetDaysUsedAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncAction UpdateStatisticsAsync(int32_t pagesViewed, int32_t favoritesCount, int32_t daysUsed) = 0;
     };
 
     // 数据服务实现
@@ -49,17 +47,16 @@ namespace winrt::MicrosoftDocsGallery::Services
         DataService();
 
         // IDataService 实现
-        winrt::Windows::Foundation::IAsyncOperation<std::vector<LearningTopic>> GetTopicsAsync() override;
-        winrt::Windows::Foundation::IAsyncOperation<std::vector<LearningTopic>> GetTopicsByCategoryAsync(winrt::hstring const& category) override;
-        winrt::Windows::Foundation::IAsyncOperation<std::vector<LearningTopic>> SearchTopicsAsync(winrt::hstring const& query) override;
-        winrt::Windows::Foundation::IAsyncAction SaveTopicAsync(LearningTopic const& topic) override;
+        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicTitlesAsync() override;
+        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicUrlsAsync() override;
+        winrt::Windows::Foundation::IAsyncAction RefreshDataAsync() override;
 
     private:
-        std::vector<LearningTopic> m_cachedTopics;
+        std::vector<winrt::hstring> m_topicTitles;
+        std::vector<winrt::hstring> m_topicUrls;
         winrt::Windows::Foundation::DateTime m_lastCacheUpdate;
         
-        winrt::Windows::Foundation::IAsyncOperation<std::vector<LearningTopic>> LoadTopicsFromApiAsync();
-        std::vector<LearningTopic> GetDefaultTopics();
+        void InitializeDefaultTopics();
         bool IsCacheValid() const;
     };
 
@@ -70,18 +67,19 @@ namespace winrt::MicrosoftDocsGallery::Services
         FavoritesService();
 
         // IFavoritesService 实现
-        winrt::Windows::Foundation::IAsyncOperation<std::vector<FavoriteItem>> GetFavoritesAsync() override;
-        winrt::Windows::Foundation::IAsyncAction AddToFavoritesAsync(FavoriteItem const& item) override;
+        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetFavoriteUrlsAsync() override;
+        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetFavoriteTitlesAsync() override;
+        winrt::Windows::Foundation::IAsyncAction AddToFavoritesAsync(winrt::hstring const& url, winrt::hstring const& title) override;
         winrt::Windows::Foundation::IAsyncAction RemoveFromFavoritesAsync(winrt::hstring const& url) override;
         winrt::Windows::Foundation::IAsyncOperation<bool> IsFavoriteAsync(winrt::hstring const& url) override;
 
     private:
-        std::vector<FavoriteItem> m_favorites;
+        std::vector<winrt::hstring> m_favoriteUrls;
+        std::vector<winrt::hstring> m_favoriteTitles;
         bool m_isLoaded{ false };
         
         winrt::Windows::Foundation::IAsyncAction LoadFavoritesAsync();
         winrt::Windows::Foundation::IAsyncAction SaveFavoritesAsync();
-        winrt::hstring GetFavoritesFilePath() const;
     };
 
     // 设置服务实现
@@ -91,20 +89,19 @@ namespace winrt::MicrosoftDocsGallery::Services
         SettingsService();
 
         // ISettingsService 实现
-        winrt::Windows::Foundation::IAsyncOperation<UserPreferences> GetUserPreferencesAsync() override;
-        winrt::Windows::Foundation::IAsyncAction SaveUserPreferencesAsync(UserPreferences const& preferences) override;
-        winrt::Windows::Foundation::IAsyncOperation<AppStatistics> GetAppStatisticsAsync() override;
-        winrt::Windows::Foundation::IAsyncAction UpdateAppStatisticsAsync(AppStatistics const& statistics) override;
+        winrt::Windows::Foundation::IAsyncOperation<int32_t> GetTotalPagesViewedAsync() override;
+        winrt::Windows::Foundation::IAsyncOperation<int32_t> GetFavoritesCountAsync() override;
+        winrt::Windows::Foundation::IAsyncOperation<int32_t> GetDaysUsedAsync() override;
+        winrt::Windows::Foundation::IAsyncAction UpdateStatisticsAsync(int32_t pagesViewed, int32_t favoritesCount, int32_t daysUsed) override;
 
     private:
-        UserPreferences m_userPreferences;
-        AppStatistics m_appStatistics;
-        bool m_preferencesLoaded{ false };
+        int32_t m_totalPagesViewed{ 42 };
+        int32_t m_favoritesCount{ 3 };
+        int32_t m_daysUsed{ 7 };
         bool m_statisticsLoaded{ false };
 
-        winrt::Windows::Foundation::IAsyncAction LoadPreferencesAsync();
         winrt::Windows::Foundation::IAsyncAction LoadStatisticsAsync();
-        winrt::Windows::Storage::StorageFolder GetLocalSettingsFolder();
+        winrt::Windows::Foundation::IAsyncAction SaveStatisticsAsync();
     };
 
     // 服务定位器 - 依赖注入的简单实现

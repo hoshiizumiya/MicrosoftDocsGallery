@@ -1,22 +1,28 @@
 ﻿#pragma once
 #include "BindableBase.h"
-#include "..\Models\Models.h"
 #include "..\Services\Services.h"
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Microsoft.UI.Xaml.Input.h>
 #include <memory>
 
 namespace winrt::MicrosoftDocsGallery::ViewModels
 {
-    using namespace Models;
     using namespace Services;
 
-    // 首页 ViewModel
-    struct HomePageViewModel : public BindableBase
+    // 前向声明
+    struct HomePageViewModel;
+
+    // 首页 ViewModel - 使用 WinRT 实现模式
+    struct HomePageViewModel : winrt::implements<HomePageViewModel, winrt::Microsoft::UI::Xaml::Data::INotifyPropertyChanged>
     {
     public:
         HomePageViewModel();
         ~HomePageViewModel() = default;
+
+        // INotifyPropertyChanged 实现
+        winrt::event_token PropertyChanged(winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& handler);
+        void PropertyChanged(winrt::event_token const& token) noexcept;
 
         // 属性 - 这些属性会绑定到 XAML 中的控件
         
@@ -34,34 +40,21 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
 
         // 加载状态
         bool IsLoading() const { return m_isLoading; }
-        void IsLoading(bool value) 
-        { 
-            if (SetProperty(m_isLoading, value, L"IsLoading"))
-            {
-                // 通知相关命令状态可能发生变化
-                if (m_refreshCommand)
-                {
-                    m_refreshCommand->RaiseCanExecuteChanged();
-                }
-            }
-        }
+        void IsLoading(bool value);
 
         // 欢迎消息
         winrt::hstring WelcomeMessage() const { return m_welcomeMessage; }
-        void WelcomeMessage(winrt::hstring const& value)
-        {
-            SetProperty(m_welcomeMessage, value, L"WelcomeMessage");
-        }
+        void WelcomeMessage(winrt::hstring const& value);
 
         // 用户统计信息
-        int TotalPagesViewed() const { return m_appStatistics.TotalPagesViewed; }
-        int FavoritesCount() const { return m_appStatistics.FavoritesCount; }
-        int DaysUsed() const { return m_appStatistics.DaysUsed; }
+        int TotalPagesViewed() const { return m_totalPagesViewed; }
+        int FavoritesCount() const { return m_favoritesCount; }
+        int DaysUsed() const { return m_daysUsed; }
 
         // 命令 - 这些命令会绑定到按钮的 Command 属性
-        winrt::Microsoft::UI::Xaml::Input::ICommand RefreshCommand() const { return *m_refreshCommand; }
-        winrt::Microsoft::UI::Xaml::Input::ICommand NavigateToTopicCommand() const { return *m_navigateToTopicCommand; }
-        winrt::Microsoft::UI::Xaml::Input::ICommand OpenQuickAccessCommand() const { return *m_openQuickAccessCommand; }
+        winrt::Microsoft::UI::Xaml::Input::ICommand RefreshCommand() const;
+        winrt::Microsoft::UI::Xaml::Input::ICommand NavigateToTopicCommand() const;
+        winrt::Microsoft::UI::Xaml::Input::ICommand OpenQuickAccessCommand() const;
 
         // 公共方法
         winrt::Windows::Foundation::IAsyncAction InitializeAsync();
@@ -79,7 +72,9 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         
         bool m_isLoading{ false };
         winrt::hstring m_welcomeMessage{ L"欢迎使用 Microsoft 文档浏览器" };
-        AppStatistics m_appStatistics;
+        int m_totalPagesViewed{ 0 };
+        int m_favoritesCount{ 0 };
+        int m_daysUsed{ 0 };
 
         // 服务依赖
         std::shared_ptr<IDataService> m_dataService;
@@ -93,6 +88,7 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
 
         // 事件
         winrt::event<winrt::Windows::Foundation::EventHandler<winrt::hstring>> m_navigationRequested;
+        winrt::event<winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> m_propertyChanged;
 
         // 私有方法
         winrt::Windows::Foundation::IAsyncAction LoadFeaturedTopicsAsync();
@@ -100,6 +96,7 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         winrt::Windows::Foundation::IAsyncAction LoadUserStatisticsAsync();
         void InitializeCommands();
         void UpdateWelcomeMessage();
+        void RaisePropertyChanged(winrt::hstring const& propertyName);
 
         // 命令实现
         winrt::Windows::Foundation::IAsyncAction OnRefreshAsync(winrt::Windows::Foundation::IInspectable const& parameter);
@@ -109,26 +106,30 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
     };
 
     // 基础页面 ViewModel 类 - 包含常见的页面功能
-    struct BasePageViewModel : public BindableBase
+    struct BasePageViewModel : winrt::implements<BasePageViewModel, winrt::Microsoft::UI::Xaml::Data::INotifyPropertyChanged>
     {
     public:
         BasePageViewModel();
         virtual ~BasePageViewModel() = default;
 
+        // INotifyPropertyChanged 实现
+        winrt::event_token PropertyChanged(winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& handler);
+        void PropertyChanged(winrt::event_token const& token) noexcept;
+
         // 通用属性
         winrt::hstring Title() const { return m_title; }
-        void Title(winrt::hstring const& value) { SetProperty(m_title, value, L"Title"); }
+        void Title(winrt::hstring const& value);
 
         bool IsBusy() const { return m_isBusy; }
-        void IsBusy(bool value) { SetProperty(m_isBusy, value, L"IsBusy"); }
+        void IsBusy(bool value);
 
         winrt::hstring ErrorMessage() const { return m_errorMessage; }
-        void ErrorMessage(winrt::hstring const& value) { SetProperty(m_errorMessage, value, L"ErrorMessage"); }
+        void ErrorMessage(winrt::hstring const& value);
 
         bool HasError() const { return !m_errorMessage.empty(); }
 
         // 通用命令
-        winrt::Microsoft::UI::Xaml::Input::ICommand GoBackCommand() const { return *m_goBackCommand; }
+        winrt::Microsoft::UI::Xaml::Input::ICommand GoBackCommand() const;
 
         // 虚方法 - 子类可以重写
         virtual winrt::Windows::Foundation::IAsyncAction InitializeAsync() { co_return; }
@@ -146,6 +147,7 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         void ClearError() { ErrorMessage(L""); }
         void SetError(winrt::hstring const& message);
         void RaiseNavigationRequested(winrt::hstring const& destination);
+        void RaisePropertyChanged(winrt::hstring const& propertyName);
 
         // 异步操作包装器 - 自动处理 IsBusy 状态和错误
         template<typename TFunc>
@@ -189,6 +191,7 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
 
         winrt::event<winrt::Windows::Foundation::EventHandler<winrt::hstring>> m_navigationRequested;
         winrt::event<winrt::Windows::Foundation::EventHandler<winrt::hstring>> m_errorOccurred;
+        winrt::event<winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventHandler> m_propertyChanged;
 
         void OnGoBack(winrt::Windows::Foundation::IInspectable const& parameter);
     };

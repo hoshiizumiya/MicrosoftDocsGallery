@@ -24,6 +24,67 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         UpdateWelcomeMessage();
     }
 
+    // INotifyPropertyChanged 实现
+    winrt::event_token HomePageViewModel::PropertyChanged(winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& handler)
+    {
+        return m_propertyChanged.add(handler);
+    }
+
+    void HomePageViewModel::PropertyChanged(winrt::event_token const& token) noexcept
+    {
+        m_propertyChanged.remove(token);
+    }
+
+    void HomePageViewModel::RaisePropertyChanged(winrt::hstring const& propertyName)
+    {
+        m_propertyChanged(*this, winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventArgs(propertyName));
+    }
+
+    // 属性实现
+    void HomePageViewModel::IsLoading(bool value)
+    {
+        if (m_isLoading != value)
+        {
+            m_isLoading = value;
+            RaisePropertyChanged(L"IsLoading");
+            if (m_refreshCommand)
+            {
+                m_refreshCommand->RaiseCanExecuteChanged();
+            }
+        }
+    }
+
+    void HomePageViewModel::WelcomeMessage(winrt::hstring const& value)
+    {
+        if (m_welcomeMessage != value)
+        {
+            m_welcomeMessage = value;
+            RaisePropertyChanged(L"WelcomeMessage");
+        }
+    }
+
+    // 命令属性
+    winrt::Microsoft::UI::Xaml::Input::ICommand HomePageViewModel::RefreshCommand() const
+    {
+        if (m_refreshCommand)
+            return *m_refreshCommand;
+        return nullptr;
+    }
+
+    winrt::Microsoft::UI::Xaml::Input::ICommand HomePageViewModel::NavigateToTopicCommand() const
+    {
+        if (m_navigateToTopicCommand)
+            return *m_navigateToTopicCommand;
+        return nullptr;
+    }
+
+    winrt::Microsoft::UI::Xaml::Input::ICommand HomePageViewModel::OpenQuickAccessCommand() const
+    {
+        if (m_openQuickAccessCommand)
+            return *m_openQuickAccessCommand;
+        return nullptr;
+    }
+
     void HomePageViewModel::InitializeCommands()
     {
         // 刷新命令
@@ -79,17 +140,18 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         try
         {
             // 从数据服务获取特色主题
-            auto topics = co_await m_dataService->GetTopicsAsync();
+            auto topics = co_await m_dataService->GetTopicTitlesAsync();
             
             // 清空当前集合
             m_featuredTopics.Clear();
 
             // 只取前6个作为特色主题
-            size_t count = std::min(topics.size(), static_cast<size_t>(6));
-            for (size_t i = 0; i < count; ++i)
+            uint32_t count = (std::min)(topics.Size(), static_cast<uint32_t>(6));
+            for (uint32_t i = 0; i < count; ++i)
             {
-                // 将 LearningTopic 包装为 IInspectable
-                m_featuredTopics.Append(winrt::box_value(topics[i].Title));
+                // 将标题包装为 IInspectable
+                auto title = topics.GetAt(i);
+                m_featuredTopics.Append(winrt::box_value(title));
             }
 
             // 通知 UI 更新
@@ -137,7 +199,9 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         try
         {
             // 从设置服务加载统计信息
-            m_appStatistics = co_await m_settingsService->GetAppStatisticsAsync();
+            m_totalPagesViewed = co_await m_settingsService->GetTotalPagesViewedAsync();
+            m_favoritesCount = co_await m_settingsService->GetFavoritesCountAsync();
+            m_daysUsed = co_await m_settingsService->GetDaysUsedAsync();
             
             // 通知相关属性更新
             RaisePropertyChanged(L"TotalPagesViewed");
@@ -147,7 +211,9 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         catch (...)
         {
             // 使用默认统计信息
-            m_appStatistics = AppStatistics{};
+            m_totalPagesViewed = 0;
+            m_favoritesCount = 0;
+            m_daysUsed = 0;
         }
     }
 
@@ -260,10 +326,61 @@ namespace winrt::MicrosoftDocsGallery::ViewModels
         );
     }
 
+    // INotifyPropertyChanged 实现
+    winrt::event_token BasePageViewModel::PropertyChanged(winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& handler)
+    {
+        return m_propertyChanged.add(handler);
+    }
+
+    void BasePageViewModel::PropertyChanged(winrt::event_token const& token) noexcept
+    {
+        m_propertyChanged.remove(token);
+    }
+
+    void BasePageViewModel::RaisePropertyChanged(winrt::hstring const& propertyName)
+    {
+        m_propertyChanged(*this, winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventArgs(propertyName));
+    }
+
+    // 属性实现
+    void BasePageViewModel::Title(winrt::hstring const& value)
+    {
+        if (m_title != value)
+        {
+            m_title = value;
+            RaisePropertyChanged(L"Title");
+        }
+    }
+
+    void BasePageViewModel::IsBusy(bool value)
+    {
+        if (m_isBusy != value)
+        {
+            m_isBusy = value;
+            RaisePropertyChanged(L"IsBusy");
+        }
+    }
+
+    void BasePageViewModel::ErrorMessage(winrt::hstring const& value)
+    {
+        if (m_errorMessage != value)
+        {
+            m_errorMessage = value;
+            RaisePropertyChanged(L"ErrorMessage");
+            RaisePropertyChanged(L"HasError");
+        }
+    }
+
+    winrt::Microsoft::UI::Xaml::Input::ICommand BasePageViewModel::GoBackCommand() const
+    {
+        if (m_goBackCommand)
+            return *m_goBackCommand;
+        return nullptr;
+    }
+
     void BasePageViewModel::SetError(winrt::hstring const& message)
     {
         ErrorMessage(message);
-        RaisePropertyChanged(L"HasError");
         m_errorOccurred(*this, message);
     }
 

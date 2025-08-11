@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "App.xaml.h"
 #include "MainWindow.xaml.h"
+#include "Services\Services.h"
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -31,6 +32,9 @@ namespace winrt::MicrosoftDocsGallery::implementation
         if (ApplicationLanguages::PrimaryLanguageOverride().empty()) {
             ApplicationLanguages::PrimaryLanguageOverride(L"en-US");
         }
+
+        // 初始化服务
+        Services::ServiceLocator::Instance().InitializeDefaultServices();
     }
 
     /// <summary>
