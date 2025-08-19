@@ -28,13 +28,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
             }
         });
 #endif
-        // 设置默认语言为英语
-        if (ApplicationLanguages::PrimaryLanguageOverride().empty()) {
-            ApplicationLanguages::PrimaryLanguageOverride(L"en-US");
-        }
-
-        // 初始化服务
-        Services::ServiceLocator::Instance().InitializeDefaultServices();
+        
     }
 
     /// <summary>
@@ -46,6 +40,13 @@ namespace winrt::MicrosoftDocsGallery::implementation
         window = make<MainWindow>();
         
         // 在WinUI 3中，直接调用Activate()
-        window.Activate();
+
+        window.Activate();// 设置默认语言为英语
+        if (ApplicationLanguages::PrimaryLanguageOverride().empty()) {
+            ApplicationLanguages::PrimaryLanguageOverride(L"en-US");
+        }
+
+        // 初始化服务
+        Services::ServiceLocator::Instance().InitializeDefaultServices();
     }
 }

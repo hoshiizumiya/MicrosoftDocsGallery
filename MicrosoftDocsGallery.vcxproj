@@ -119,7 +119,7 @@
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
-      <DependentUpon>Helpers\NavItemIconHelper.idl</DependentUpon>
+      <DependentUpon>Helpers\NavigationView.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="HomePage.xaml.h">
@@ -181,7 +181,7 @@
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
-      <DependentUpon>Helpers\NavItemIconHelper.idl</DependentUpon>
+      <DependentUpon>Helpers\NavigationView.idl</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="HomePage.xaml.cpp">
@@ -221,7 +221,7 @@
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="Helpers\NavItemIconHelper.idl">
+    <Midl Include="Helpers\NavigationView.idl">
       <!--<DependentUpon>Helpers\Helpers.NavItemIconHelper.cpp</DependentUpon>-->
       <SubType>Code</SubType>
     </Midl>

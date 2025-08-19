@@ -25,7 +25,7 @@
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
     <Midl Include="FavoritesPage.idl" />
-    <Midl Include="Helpers\NavItemIconHelper.idl">
+    <Midl Include="Helpers\NavigationView.idl">
       <Filter>Helpers</Filter>
     </Midl>
   </ItemGroup>

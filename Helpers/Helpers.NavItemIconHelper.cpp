@@ -18,7 +18,7 @@
  * 而无需继承或修改原始控件类。
  */
 #include "pch.h"
-#include "Helpers.NavItemIconHelper.h"
+#include "Helpers/Helpers.NavItemIconHelper.h"
 #include "Helpers/NavItemIconHelper.g.cpp"
 
 // 必要的 WinRT 头文件
