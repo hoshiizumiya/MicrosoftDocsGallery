@@ -112,12 +112,16 @@
     <ClInclude Include="Converters\Converters.h" />
     <ClInclude Include="FavoritesPage.xaml.h">
       <DependentUpon>FavoritesPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="FundamentalsPage.xaml.h">
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h" />
+    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
+      <DependentUpon>Helpers\NavItemIconHelper.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="HomePage.xaml.h">
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -149,7 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
-    <Page Include="FavoritesPage.xaml" />
+    <Page Include="FavoritesPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="FundamentalsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -168,12 +174,16 @@
   <ItemGroup>
     <ClCompile Include="FavoritesPage.xaml.cpp">
       <DependentUpon>FavoritesPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="FundamentalsPage.xaml.cpp">
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp" />
+    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
+      <DependentUpon>Helpers\NavItemIconHelper.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="HomePage.xaml.cpp">
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -211,7 +221,10 @@
       <DependentUpon>FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="Helpers\NavItemIconHelper.idl" />
+    <Midl Include="Helpers\NavItemIconHelper.idl">
+      <!--<DependentUpon>Helpers\Helpers.NavItemIconHelper.cpp</DependentUpon>-->
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="HomePage.idl">
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>

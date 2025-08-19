@@ -95,6 +95,26 @@ namespace winrt::MicrosoftDocsGallery::implementation
         }
     }
 
+    void WebViewPage::FavoriteButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
+    {
+        throw winrt::hresult_not_implemented();
+    }
+
+    void WebViewPage::RefreshPage_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
+    {
+        throw winrt::hresult_not_implemented();
+    }
+
+    void WebViewPage::OpenInBrowser_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
+    {
+        throw winrt::hresult_not_implemented();
+    }
+
+    void WebViewPage::SharePage_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e)
+    {
+        throw winrt::hresult_not_implemented();
+    }
+
     void WebViewPage::AddNewTab(hstring const& url, hstring const& title)
     {
         auto tabData = std::make_shared<TabData>();

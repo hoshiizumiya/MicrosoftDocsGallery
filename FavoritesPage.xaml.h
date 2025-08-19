@@ -37,7 +37,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
         // 收藏夹管理方法
         void AddToFavorites(winrt::hstring const& url, winrt::hstring const& title);
         void RemoveFromFavorites(winrt::hstring const& url);
-        void ClearAllFavorites();
+        void ClearAllFavorites(winrt::Windows::Foundation::IInspectable const&, winrt::Microsoft::UI::Xaml::RoutedEventArgs const&);
         bool IsInFavorites(winrt::hstring const& url);
 
         // 事件处理器

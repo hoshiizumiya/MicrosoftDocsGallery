@@ -57,7 +57,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
         }
     }
 
-    void FavoritesPage::ClearAllFavorites()
+    void FavoritesPage::ClearAllFavorites(winrt::Windows::Foundation::IInspectable const&, winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
     {
         m_allFavorites.clear();
         SaveFavorites();

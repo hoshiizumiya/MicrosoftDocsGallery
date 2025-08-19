@@ -141,6 +141,11 @@ namespace winrt::MicrosoftDocsGallery::implementation
         return false;
     }
 
+    void MainWindow::ShowSearchSuggestions(winrt::hstring const& query)
+    {
+        throw winrt::hresult_not_implemented();
+    }
+
     void MainWindow::NavigationView_ItemInvoked(NavigationView const& /*sender*/, NavigationViewItemInvokedEventArgs const& args)
     {
         hstring tag;
@@ -389,6 +394,11 @@ namespace winrt::MicrosoftDocsGallery::implementation
         }
         
         SearchBox().ItemsSource(suggestions);
+    }
+
+    void MainWindow::InitializeApplication()
+    {
+		// todo: 初始化应用程序设置
     }
     
     void MainWindow::SetNavigationSelection(hstring const& pageTag)

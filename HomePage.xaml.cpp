@@ -85,4 +85,25 @@ namespace winrt::MicrosoftDocsGallery::implementation
             }
         }
     }
+
+    void HomePage::Animated_GotItem(winrt::Windows::Foundation::IInspectable const&/* sender*/, winrt::Microsoft::UI::Xaml::RoutedEventArgs const&/* e*/)
+    {
+        throw winrt::hresult_not_implemented();
+    }
+
+    void HomePage::QuickAccess_Click(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& /*e*/)
+    {
+        throw winrt::hresult_not_implemented();
+    }
+
+
+    void HomePage::OpenWinUIDocs_Click(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& /*e*/)
+    {
+        throw winrt::hresult_not_implemented();
+    }
 }
+
+
+
+
+

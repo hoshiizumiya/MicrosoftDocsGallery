@@ -2,7 +2,7 @@
 {
 	[bindable]
 	[default_interface]
-	runtimeclass NavItemIconHelper : Windows.UI.Xaml.DependencyObject
+	runtimeclass NavItemIconHelper : Microsoft.UI.Xaml.DependencyObject
 	{
 		NavItemIconHelper();
 
@@ -10,6 +10,12 @@
 		static Microsoft.UI.Xaml.DependencyProperty ShowNotificationDotProperty{ get; };
 		static Microsoft.UI.Xaml.DependencyProperty UnselectedIconProperty{ get; };
 		static Microsoft.UI.Xaml.DependencyProperty StaticIconVisibilityProperty{ get; };
+
+
+		///*Object SelectedIcon;
+		//Object ShowNotificationDot;
+		//Object UnselectedIcon;
+		//Object StaticIconVisibility;*/
 
 		static Object GetSelectedIcon(Microsoft.UI.Xaml.DependencyObject obj);
 		static void SetSelectedIcon(Microsoft.UI.Xaml.DependencyObject obj, Object value);
@@ -23,4 +29,6 @@
 		static Microsoft.UI.Xaml.Visibility GetStaticIconVisibility(Microsoft.UI.Xaml.DependencyObject obj);
 		static void SetStaticIconVisibility(Microsoft.UI.Xaml.DependencyObject obj, Microsoft.UI.Xaml.Visibility value);
 	}
+
+
 }

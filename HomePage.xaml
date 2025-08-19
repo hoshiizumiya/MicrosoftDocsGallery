@@ -25,24 +25,26 @@
         </Style>
     </Page.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="40">
-        <StackPanel Spacing="32" MaxWidth="1200">
+    <ScrollViewer Padding="40" VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="1200" Spacing="32">
 
-            <!-- 欢迎区域 -->
+            <!--  欢迎区域  -->
             <StackPanel Spacing="12">
-                <TextBlock Text="欢迎使用 Microsoft Docs Gallery"
-                          FontSize="32"
-                          FontWeight="Bold"
-                          HorizontalAlignment="Center" />
-                <TextBlock Text="探索最新的Microsoft技术文档和学习资源"
-                          FontSize="16"
-                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                          HorizontalAlignment="Center" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="32"
+                    FontWeight="Bold"
+                    Text="欢迎使用 Microsoft Docs Gallery" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontSize="16"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="探索最新的Microsoft技术文档和学习资源" />
             </StackPanel>
 
-            <!-- 快速访问卡片 -->
+            <!--  快速访问卡片  -->
             <StackPanel>
-                <TextBlock Text="快速访问" Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="快速访问" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -50,56 +52,80 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- WinUI 3 卡片 -->
+                    <!--  WinUI 3 卡片  -->
                     <Border Grid.Column="0" Style="{StaticResource HeroCardStyle}">
                         <StackPanel Spacing="12">
-                            <FontIcon Glyph="&#xE8A5;" FontSize="32" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" />
-                            <TextBlock Text="WinUI 3" FontSize="18" FontWeight="SemiBold" />
-                            <TextBlock Text="构建现代Windows应用程序的最新UI框架"
-                                      TextWrapping="Wrap"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                            <Button Content="开始学习"
-                                   Style="{StaticResource AccentButtonStyle}"
-                                   Click="OpenWinUIDocs_Click"
-                                   HorizontalAlignment="Stretch" />
+                            <FontIcon
+                                FontSize="32"
+                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                Glyph="&#xE8A5;" />
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="WinUI 3" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="构建现代Windows应用程序的最新UI框架"
+                                TextWrapping="Wrap" />
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Click="OpenWinUIDocs_Click"
+                                Content="开始学习"
+                                Style="{StaticResource AccentButtonStyle}" />
                         </StackPanel>
                     </Border>
 
-                    <!-- .NET 卡片 -->
+                    <!--  .NET 卡片  -->
                     <Border Grid.Column="1" Style="{StaticResource HeroCardStyle}">
                         <StackPanel Spacing="12">
-                            <FontIcon Glyph="&#xE756;" FontSize="32" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" />
-                            <TextBlock Text=".NET 平台" FontSize="18" FontWeight="SemiBold" />
-                            <TextBlock Text="跨平台的现代开发平台，支持多种编程语言"
-                                      TextWrapping="Wrap"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                            <Button Content="探索 .NET"
-                                   HorizontalAlignment="Stretch"
-                                   Tag="https://learn.microsoft.com/dotnet/"
-                                   Click="QuickAccess_Click" />
+                            <FontIcon
+                                FontSize="32"
+                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                Glyph="&#xE756;" />
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text=".NET 平台" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="跨平台的现代开发平台，支持多种编程语言"
+                                TextWrapping="Wrap" />
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Click="QuickAccess_Click"
+                                Content="探索 .NET"
+                                Tag="https://learn.microsoft.com/dotnet/" />
                         </StackPanel>
                     </Border>
 
-                    <!-- Azure 卡片 -->
+                    <!--  Azure 卡片  -->
                     <Border Grid.Column="2" Style="{StaticResource HeroCardStyle}">
                         <StackPanel Spacing="12">
-                            <FontIcon Glyph="&#xE753;" FontSize="32" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" />
-                            <TextBlock Text="Azure 云服务" FontSize="18" FontWeight="SemiBold" />
-                            <TextBlock Text="Microsoft的云计算平台，提供全面的云服务"
-                                      TextWrapping="Wrap"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                            <Button Content="了解 Azure"
-                                   HorizontalAlignment="Stretch"
-                                   Tag="https://learn.microsoft.com/azure/"
-                                   Click="QuickAccess_Click" />
+                            <FontIcon
+                                FontSize="32"
+                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                Glyph="&#xE753;" />
+                            <TextBlock
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="Azure 云服务" />
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="Microsoft的云计算平台，提供全面的云服务"
+                                TextWrapping="Wrap" />
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Click="QuickAccess_Click"
+                                Content="了解 Azure"
+                                Tag="https://learn.microsoft.com/azure/" />
                         </StackPanel>
                     </Border>
                 </Grid>
             </StackPanel>
 
-            <!-- 特色内容轮播 -->
+            <!--  特色内容轮播  -->
             <StackPanel>
-                <TextBlock Text="特色内容" Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="特色内容" />
                 <ScrollViewer
                     x:Name="scrollView"
                     Height="200"
@@ -120,23 +146,27 @@
                                 <Border
                                     Width="300"
                                     Height="160"
+                                    Padding="16"
                                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                                     BorderThickness="1"
-                                    CornerRadius="8"
-                                    Padding="16">
+                                    CornerRadius="8">
                                     <StackPanel VerticalAlignment="Center" Spacing="8">
-                                        <FontIcon Glyph="&#xE8F1;" FontSize="24"
-                                                 Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" />
-                                        <TextBlock Text="{x:Bind}"
-                                                  FontSize="16"
-                                                  FontWeight="SemiBold"
-                                                  HorizontalAlignment="Center"
-                                                  TextAlignment="Center"
-                                                  TextWrapping="Wrap" />
-                                        <Button Content="查看详情"
-                                               HorizontalAlignment="Center"
-                                               Style="{StaticResource AccentButtonStyle}" />
+                                        <FontIcon
+                                            FontSize="24"
+                                            Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                            Glyph="&#xE8F1;" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="16"
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind}"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap" />
+                                        <Button
+                                            HorizontalAlignment="Center"
+                                            Content="查看详情"
+                                            Style="{StaticResource AccentButtonStyle}" />
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
@@ -145,16 +175,16 @@
                 </ScrollViewer>
             </StackPanel>
 
-            <!-- 最近浏览 -->
+            <!--  最近浏览  -->
             <StackPanel x:Name="RecentPanel" Spacing="16">
-                <TextBlock Text="最近浏览" Style="{StaticResource SectionHeaderStyle}" />
-                <ListView x:Name="RecentItemsList"
-                         MaxHeight="300"
-                         SelectionMode="None">
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="最近浏览" />
+                <ListView
+                    x:Name="RecentItemsList"
+                    MaxHeight="300"
+                    SelectionMode="None">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
-                            <Border Style="{StaticResource HeroCardStyle}"
-                                   HorizontalAlignment="Stretch">
+                            <Border HorizontalAlignment="Stretch" Style="{StaticResource HeroCardStyle}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -162,26 +192,28 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <FontIcon Grid.Column="0"
-                                             Glyph="&#xE7BE;"
-                                             FontSize="16"
-                                             Margin="0,0,12,0"
-                                             VerticalAlignment="Center" />
+                                    <FontIcon
+                                        Grid.Column="0"
+                                        Margin="0,0,12,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="16"
+                                        Glyph="&#xE7BE;" />
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="{x:Bind}"
-                                                  FontWeight="SemiBold" />
-                                        <TextBlock Text="上次访问时间：今天"
-                                                  FontSize="12"
-                                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock FontWeight="SemiBold" Text="{x:Bind}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="上次访问时间：今天" />
                                     </StackPanel>
 
-                                    <Button Grid.Column="2"
-                                           Content="&#xE8A7;"
-                                           FontFamily="Segoe MDL2 Assets"
-                                           Style="{StaticResource SubtleButtonStyle}"
-                                           ToolTipService.ToolTip="打开"
-                                           Click="Animated_GotItem" />
+                                    <Button
+                                        Grid.Column="2"
+                                        Click="Animated_GotItem"
+                                        Content="&#xE8A7;"
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Style="{StaticResource SubtleButtonStyle}"
+                                        ToolTipService.ToolTip="打开" />
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -189,9 +221,9 @@
                 </ListView>
             </StackPanel>
 
-            <!-- 统计信息 -->
+            <!--  统计信息  -->
             <StackPanel>
-                <TextBlock Text="使用统计" Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="使用统计" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -202,45 +234,61 @@
 
                     <Border Grid.Column="0" Style="{StaticResource HeroCardStyle}">
                         <StackPanel HorizontalAlignment="Center" Spacing="8">
-                            <TextBlock Text="125" FontSize="28" FontWeight="Bold"
-                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                      HorizontalAlignment="Center" />
-                            <TextBlock Text="页面浏览"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                      HorizontalAlignment="Center" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="Bold"
+                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                Text="125" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="页面浏览" />
                         </StackPanel>
                     </Border>
 
                     <Border Grid.Column="1" Style="{StaticResource HeroCardStyle}">
                         <StackPanel HorizontalAlignment="Center" Spacing="8">
-                            <TextBlock Text="23" FontSize="28" FontWeight="Bold"
-                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                      HorizontalAlignment="Center" />
-                            <TextBlock Text="收藏文档"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                      HorizontalAlignment="Center" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="Bold"
+                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                Text="23" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="收藏文档" />
                         </StackPanel>
                     </Border>
 
                     <Border Grid.Column="2" Style="{StaticResource HeroCardStyle}">
                         <StackPanel HorizontalAlignment="Center" Spacing="8">
-                            <TextBlock Text="7" FontSize="28" FontWeight="Bold"
-                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                      HorizontalAlignment="Center" />
-                            <TextBlock Text="天连续使用"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                      HorizontalAlignment="Center" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="Bold"
+                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                Text="7" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="天连续使用" />
                         </StackPanel>
                     </Border>
 
                     <Border Grid.Column="3" Style="{StaticResource HeroCardStyle}">
                         <StackPanel HorizontalAlignment="Center" Spacing="8">
-                            <TextBlock Text="45" FontSize="28" FontWeight="Bold"
-                                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                      HorizontalAlignment="Center" />
-                            <TextBlock Text="分钟学习时间"
-                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                      HorizontalAlignment="Center" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="28"
+                                FontWeight="Bold"
+                                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                Text="45" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="分钟学习时间" />
                         </StackPanel>
                     </Border>
                 </Grid>

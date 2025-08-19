@@ -12,6 +12,7 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
         static winrt::Microsoft::UI::Xaml::DependencyProperty ShowNotificationDotProperty();
         static winrt::Microsoft::UI::Xaml::DependencyProperty UnselectedIconProperty();
         static winrt::Microsoft::UI::Xaml::DependencyProperty StaticIconVisibilityProperty();
+
         static winrt::Windows::Foundation::IInspectable GetSelectedIcon(winrt::Microsoft::UI::Xaml::DependencyObject const& obj);
         static void SetSelectedIcon(winrt::Microsoft::UI::Xaml::DependencyObject const& obj, winrt::Windows::Foundation::IInspectable const& value);
         static bool GetShowNotificationDot(winrt::Microsoft::UI::Xaml::DependencyObject const& obj);

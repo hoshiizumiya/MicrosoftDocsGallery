@@ -8,7 +8,7 @@
         // 收藏夹管理方法
         void AddToFavorites(String url, String title);
         void RemoveFromFavorites(String url);
-        void ClearAllFavorites();
+        void ClearAllFavorites(Object sender, Microsoft.UI.Xaml.RoutedEventArgs e);
         Boolean IsInFavorites(String url);
         
         // 事件处理器

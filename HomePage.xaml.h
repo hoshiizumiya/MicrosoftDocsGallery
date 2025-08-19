@@ -22,6 +22,10 @@ namespace winrt::MicrosoftDocsGallery::implementation
         void InitializeViewModel();
         void OnNavigationRequested(winrt::Windows::Foundation::IInspectable const& sender, winrt::hstring const& destination);
         void UpdateNavigationSelection();
+    public:
+        void Animated_GotItem(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e);
+        void QuickAccess_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e);
+        void OpenWinUIDocs_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& e);
     };
 }
 
