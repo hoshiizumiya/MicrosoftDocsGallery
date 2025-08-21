@@ -655,7 +655,6 @@
                             Margin="12,8"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            
                             Fill="{ThemeResource InfoBadgeBackground}"
                             Stroke="{TemplateBinding Background}"
                             StrokeThickness="1"
@@ -809,7 +808,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>-->
-                                    <!--animations:Implicit.Animations="{StaticResource RailNavigationIconImplicitOffsetAnimation}"-->
+                                <!--  animations:Implicit.Animations="{StaticResource RailNavigationIconImplicitOffsetAnimation}"  -->
 
                                 <!--  Store: Removed  -->
                                 <!--<Border x:Name="IconColumn" Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.LatestIconColumnWidth}">-->
@@ -824,8 +823,9 @@
                                     Content="{TemplateBinding Icon}"
                                     Foreground="{ThemeResource RailNavigationIconForegroundBrush}" />
                                 <!--</Border>-->
-                                    <!--animations:Implicit.Animations="{StaticResource RailNavigationIconImplicitOffsetAnimation}"-->
+                                <!--  animations:Implicit.Animations="{StaticResource RailNavigationIconImplicitOffsetAnimation}"  -->
 
+                                <!--  未选中状态的图标容器  -->
                                 <Viewbox
                                     x:Name="UnselectedIconBox"
                                     Grid.Row="1"
@@ -836,13 +836,14 @@
                                         x:Name="UnselectedIcon"
                                         Content="{TemplateBinding helpers:NavItemIconHelper.UnselectedIcon}"
                                         Foreground="{ThemeResource RailNavigationIconForegroundBrush}" />
-                                </Viewbox><!--animations:Implicit.Animations="{StaticResource RailNavigationIconImplicitOffsetAnimation}"-->
+                                </Viewbox>
+                                <!--  animations:Implicit.Animations="{StaticResource RailNavigationIconImplicitOffsetAnimation}"  -->
+                                <!--  选中状态的图标容器  -->
                                 <Viewbox
                                     x:Name="SelectedIconBox"
                                     Grid.Row="1"
                                     Height="20"
                                     Margin="{ThemeResource NavigationViewItemOnLeftIconBoxMargin}"
-                                    
                                     Opacity="0"
                                     Visibility="{TemplateBinding helpers:NavItemIconHelper.StaticIconVisibility}">
                                     <!--  Visibility="{TemplateBinding ui:NavItemIconHelper.StaticIconVisibility}"  -->

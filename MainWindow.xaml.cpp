@@ -264,8 +264,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
         auto appWindow = window.AppWindow();
         if (appWindow)
         {
-            // 简化标题栏设置，移除有问题的API调用
-            // TODO: 设置标题栏属性
+            appWindow.TitleBar().PreferredHeightOption(winrt::Microsoft::UI::Windowing::TitleBarHeightOption::Tall);
         }
         
         // 异步设置图标

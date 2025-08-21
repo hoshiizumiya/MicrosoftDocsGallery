@@ -40,12 +40,12 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
 	{
 		// 使用静态变量确保属性只注册一次
 		// RegisterAttached 注册一个附加属性，可以应用到任何 DependencyObject
-		static Microsoft::UI::Xaml::DependencyProperty prop = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
+		static Microsoft::UI::Xaml::DependencyProperty m_SelectedIconProperty = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
 			L"SelectedIcon",											// 属性名称
 			winrt::xaml_typename<winrt::Windows::Foundation::IInspectable>(),	// 属性类型：可以是任何 WinRT 对象
 			winrt::xaml_typename<winrt::MicrosoftDocsGallery::Helpers::NavItemIconHelper>(),	// 属性所有者类型
 			Microsoft::UI::Xaml::PropertyMetadata(nullptr));			// 属性元数据，默认值为 null
-		return prop;
+		return m_SelectedIconProperty;
 	}
 
 	/// <summary>
@@ -56,12 +56,12 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
 	Microsoft::UI::Xaml::DependencyProperty NavItemIconHelper::ShowNotificationDotProperty()
 	{
 		// 注册布尔类型的附加属性
-		static Microsoft::UI::Xaml::DependencyProperty prop = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
+		static Microsoft::UI::Xaml::DependencyProperty m_ShowNotificationDotProperty = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
 			L"ShowNotificationDot",									// 属性名称
 			winrt::xaml_typename<bool>(),								// 属性类型：布尔值
 			winrt::xaml_typename<winrt::MicrosoftDocsGallery::Helpers::NavItemIconHelper>(),	// 属性所有者类型
 			Microsoft::UI::Xaml::PropertyMetadata(winrt::box_value(false)));	// 默认值：false（不显示）
-		return prop;
+		return m_ShowNotificationDotProperty;
 	}
 
 	/// <summary>
@@ -72,12 +72,12 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
 	Microsoft::UI::Xaml::DependencyProperty NavItemIconHelper::UnselectedIconProperty()
 	{
 		// 注册用于未选中状态图标的附加属性
-		static Microsoft::UI::Xaml::DependencyProperty prop = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
+		static Microsoft::UI::Xaml::DependencyProperty m_UnselectedIconProperty = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
 			L"UnselectedIcon",										// 属性名称
 			winrt::xaml_typename<winrt::Windows::Foundation::IInspectable>(),	// 属性类型：可以是任何图标对象
 			winrt::xaml_typename<winrt::MicrosoftDocsGallery::Helpers::NavItemIconHelper>(),	// 属性所有者类型
 			Microsoft::UI::Xaml::PropertyMetadata(nullptr));		// 默认值：null
-		return prop;
+		return m_UnselectedIconProperty;
 	}
 
 	/// <summary>
@@ -88,12 +88,12 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
 	Microsoft::UI::Xaml::DependencyProperty NavItemIconHelper::StaticIconVisibilityProperty()
 	{
 		// 注册可见性控制的附加属性
-		static Microsoft::UI::Xaml::DependencyProperty prop = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
+		static Microsoft::UI::Xaml::DependencyProperty m_StaticIconVisibilityProperty = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
 			L"StaticIconVisibility",								// 属性名称
 			winrt::xaml_typename<winrt::Microsoft::UI::Xaml::Visibility>(),	// 属性类型：可见性枚举
 			winrt::xaml_typename<winrt::MicrosoftDocsGallery::Helpers::NavItemIconHelper>(),	// 属性所有者类型
 			Microsoft::UI::Xaml::PropertyMetadata(winrt::box_value(Microsoft::UI::Xaml::Visibility::Collapsed)));	// 默认值：折叠（不可见）
-		return prop;
+		return m_StaticIconVisibilityProperty;
 	}
 
 	/// <summary>

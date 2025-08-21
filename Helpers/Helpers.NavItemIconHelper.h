@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "pch.h"
 #include "Helpers/NavItemIconHelper.g.h"
 
 namespace winrt::MicrosoftDocsGallery::Helpers::implementation
@@ -23,6 +23,11 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
         static winrt::Microsoft::UI::Xaml::Visibility GetStaticIconVisibility(winrt::Microsoft::UI::Xaml::DependencyObject const& obj);
         static void SetStaticIconVisibility(winrt::Microsoft::UI::Xaml::DependencyObject const& obj, winrt::Microsoft::UI::Xaml::Visibility const& value);
 
+    private:
+        static winrt::Microsoft::UI::Xaml::DependencyProperty m_SelectedIconProperty;
+        static winrt::Microsoft::UI::Xaml::DependencyProperty m_ShowNotificationDotProperty;
+        static winrt::Microsoft::UI::Xaml::DependencyProperty m_UnselectedIconProperty;
+		static winrt::Microsoft::UI::Xaml::DependencyProperty m_StaticIconVisibilityProperty;
     };
 }
 
