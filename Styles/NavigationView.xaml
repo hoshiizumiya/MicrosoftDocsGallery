@@ -631,9 +631,6 @@
                             VerticalAlignment="{TemplateBinding VerticalAlignment}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                            helpers:NavItemIconHelper.SelectedIcon="{TemplateBinding helpers:NavItemIconHelper.SelectedIcon}"
-                            helpers:NavItemIconHelper.StaticIconVisibility="{TemplateBinding helpers:NavItemIconHelper.StaticIconVisibility}"
-                            helpers:NavItemIconHelper.UnselectedIcon="{TemplateBinding helpers:NavItemIconHelper.UnselectedIcon}"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -830,11 +827,9 @@
                                     x:Name="UnselectedIconBox"
                                     Grid.Row="1"
                                     Height="20"
-                                    Margin="{ThemeResource NavigationViewItemOnLeftIconBoxMargin}"
-                                    Visibility="{TemplateBinding helpers:NavItemIconHelper.StaticIconVisibility}">
+                                    Margin="{ThemeResource NavigationViewItemOnLeftIconBoxMargin}">
                                     <ContentPresenter
                                         x:Name="UnselectedIcon"
-                                        Content="{TemplateBinding helpers:NavItemIconHelper.UnselectedIcon}"
                                         Foreground="{ThemeResource RailNavigationIconForegroundBrush}" />
                                 </Viewbox>
                                 <!--  animations:Implicit.Animations="{StaticResource RailNavigationIconImplicitOffsetAnimation}"  -->
@@ -844,12 +839,10 @@
                                     Grid.Row="1"
                                     Height="20"
                                     Margin="{ThemeResource NavigationViewItemOnLeftIconBoxMargin}"
-                                    Opacity="0"
-                                    Visibility="{TemplateBinding helpers:NavItemIconHelper.StaticIconVisibility}">
+                                    Opacity="0">
                                     <!--  Visibility="{TemplateBinding ui:NavItemIconHelper.StaticIconVisibility}"  -->
                                     <ContentPresenter
                                         x:Name="SelectedIcon"
-                                        Content="{TemplateBinding helpers:NavItemIconHelper.SelectedIcon}"
                                         Foreground="{ThemeResource NavigationViewSelectionIndicatorForeground}" />
                                 </Viewbox>
                                 <Viewbox
