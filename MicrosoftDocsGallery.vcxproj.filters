@@ -5,45 +5,28 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xaml" />
-    <Page Include="HomePage.xaml">
-      <Filter>Pages</Filter>
-    </Page>
-    <Page Include="SettingsPage.xaml">
-      <Filter>Pages</Filter>
-    </Page>
-    <Page Include="FundamentalsPage.xaml">
-      <Filter>Pages</Filter>
-    </Page>
-    <Page Include="WebViewPage.xaml">
-      <Filter>Pages</Filter>
-    </Page>
     <Page Include="Styles\NavigationView.xaml">
       <Filter>Styles</Filter>
     </Page>
     <Page Include="FavoritesPage.xaml" />
+    <Page Include="FundamentalsPage.xaml" />
+    <Page Include="HomePage.xaml" />
+    <Page Include="SettingsPage.xaml" />
+    <Page Include="WebViewPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
-    <Midl Include="FavoritesPage.idl" />
-    <Midl Include="Helpers\NavigationView.idl">
-      <Filter>Helpers</Filter>
-    </Midl>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
-      <Filter>Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="Services\Services.cpp" />
     <ClCompile Include="ViewModels\HomePageViewModel.cpp" />
+    <ClCompile Include="Helpers\NavItemIconHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="AppState.h" />
-    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Converters\Converters.h" />
     <ClInclude Include="Messaging\MessageBus.h" />
     <ClInclude Include="Services\Services.h" />

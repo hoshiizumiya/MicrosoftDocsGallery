@@ -1,8 +1,0 @@
-﻿namespace MicrosoftDocsGallery
-{
-    [default_interface]
-    runtimeclass NavigationView
-    {
-        NavigationView();
-    }
-}

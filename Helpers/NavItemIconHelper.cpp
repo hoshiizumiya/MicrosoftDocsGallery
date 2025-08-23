@@ -19,6 +19,7 @@
  */
 #include "pch.h"
 #include "NavItemIconHelper.h"
+#include "Helpers/NavItemIconHelper.g.h"
 
  // 必要的 WinRT 头文件
 #include <winrt/Windows.UI.Xaml.Interop.h>

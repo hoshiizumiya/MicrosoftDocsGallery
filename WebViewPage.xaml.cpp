@@ -72,7 +72,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
         }
     }
 
-    void WebViewPage::DocNavigation_ItemInvoked(NavigationView const& /*sender*/, NavigationViewItemInvokedEventArgs const& args)
+    void WebViewPage::DocNavigation_ItemInvoked(Microsoft::UI::Xaml::Controls::NavigationView const& /*sender*/, Microsoft::UI::Xaml::Controls::NavigationViewItemInvokedEventArgs const& args)
     {
         auto invokedItem = args.InvokedItemContainer();
         if (invokedItem)

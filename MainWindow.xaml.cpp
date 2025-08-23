@@ -146,7 +146,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
         throw winrt::hresult_not_implemented();
     }
 
-    void MainWindow::NavigationView_ItemInvoked(NavigationView const& /*sender*/, NavigationViewItemInvokedEventArgs const& args)
+    void MainWindow::NavigationView_ItemInvoked(winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewItemInvokedEventArgs const& args)
     {
         hstring tag;
 
