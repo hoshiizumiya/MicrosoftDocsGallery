@@ -12,11 +12,6 @@
 		static Microsoft.UI.Xaml.DependencyProperty StaticIconVisibilityProperty{ get; };
 
 
-		///*Object SelectedIcon;
-		//Object ShowNotificationDot;
-		//Object UnselectedIcon;
-		//Object StaticIconVisibility;*/
-
 		static Object GetSelectedIcon(Microsoft.UI.Xaml.DependencyObject obj);
 		static void SetSelectedIcon(Microsoft.UI.Xaml.DependencyObject obj, Object value);
 

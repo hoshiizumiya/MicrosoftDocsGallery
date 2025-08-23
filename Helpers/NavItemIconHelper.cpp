@@ -18,10 +18,9 @@
  * 而无需继承或修改原始控件类。
  */
 #include "pch.h"
-#include "Helpers/Helpers.NavItemIconHelper.h"
-#include "Helpers/NavItemIconHelper.g.cpp"
+#include "NavItemIconHelper.h"
 
-// 必要的 WinRT 头文件
+ // 必要的 WinRT 头文件
 #include <winrt/Windows.UI.Xaml.Interop.h>
 
 // 使用 WinRT 命名空间
@@ -43,7 +42,7 @@ namespace winrt::MicrosoftDocsGallery::Helpers::implementation
 		static Microsoft::UI::Xaml::DependencyProperty m_SelectedIconProperty = Microsoft::UI::Xaml::DependencyProperty::RegisterAttached(
 			L"SelectedIcon",											// 属性名称
 			winrt::xaml_typename<winrt::Windows::Foundation::IInspectable>(),	// 属性类型：可以是任何 WinRT 对象
-			winrt::xaml_typename<winrt::MicrosoftDocsGallery::Helpers::NavItemIconHelper>(),	// 属性所有者类型
+			winrt::xaml_typename<class_type>(),	// 属性所有者类型
 			Microsoft::UI::Xaml::PropertyMetadata(nullptr));			// 属性元数据，默认值为 null
 		return m_SelectedIconProperty;
 	}

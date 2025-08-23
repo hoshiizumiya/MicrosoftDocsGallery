@@ -110,20 +110,20 @@
   <ItemGroup>
     <ClInclude Include="AppState.h" />
     <ClInclude Include="Converters\Converters.h" />
-    <ClInclude Include="FavoritesPage.xaml.h">
-      <DependentUpon>FavoritesPage.xaml</DependentUpon>
+    <ClInclude Include="Helpers\NavItemIconHelper.h">
+      <DependentUpon>Helpers\NavItemIconHelper.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="FundamentalsPage.xaml.h">
-      <DependentUpon>FundamentalsPage.xaml</DependentUpon>
+    <ClInclude Include="Pages\FavoritesPage.xaml.h">
+      <DependentUpon>Pages\FavoritesPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="Helpers\Helpers.NavItemIconHelper.h">
-      <DependentUpon>Helpers\NavigationView.idl</DependentUpon>
+    <ClInclude Include="Pages\FundamentalsPage.xaml.h">
+      <DependentUpon>Pages\FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="HomePage.xaml.h">
-      <DependentUpon>HomePage.xaml</DependentUpon>
+    <ClInclude Include="Pages\HomePage.xaml.h">
+      <DependentUpon>Pages\HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="Messaging\MessageBus.h" />
@@ -139,53 +139,59 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="Services\Services.h" />
-    <ClInclude Include="SettingsPage.xaml.h">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    <ClInclude Include="Pages\SettingsPage.xaml.h">
+      <DependentUpon>Pages\SettingsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="Styles\NavigationView.xaml.h">
+      <DependentUpon>Styles\NavigationView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="ViewModels\BindableBase.h" />
     <ClInclude Include="ViewModels\FundamentalsPageViewModel.h" />
     <ClInclude Include="ViewModels\HomePageViewModel.h" />
-    <ClInclude Include="WebViewPage.xaml.h">
-      <DependentUpon>WebViewPage.xaml</DependentUpon>
+    <ClInclude Include="Pages\WebViewPage.xaml.h">
+      <DependentUpon>Pages\WebViewPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
-    <Page Include="FavoritesPage.xaml">
+    <Page Include="Pages\FavoritesPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="FundamentalsPage.xaml">
+    <Page Include="Pages\FundamentalsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="HomePage.xaml">
+    <Page Include="Pages\HomePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml" />
-    <Page Include="Styles\NavigationView.xaml" />
-    <Page Include="SettingsPage.xaml">
+    <Page Include="Styles\NavigationView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="WebViewPage.xaml">
+    <Page Include="Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\WebViewPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FavoritesPage.xaml.cpp">
-      <DependentUpon>FavoritesPage.xaml</DependentUpon>
+    <ClCompile Include="Helpers\NavItemIconHelper.cpp">
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="FundamentalsPage.xaml.cpp">
-      <DependentUpon>FundamentalsPage.xaml</DependentUpon>
+    <ClCompile Include="Pages\FavoritesPage.xaml.cpp">
+      <DependentUpon>Pages\FavoritesPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="Helpers\Helpers.NavItemIconHelper.cpp">
-      <DependentUpon>Helpers\NavigationView.idl</DependentUpon>
+    <ClCompile Include="Pages\FundamentalsPage.xaml.cpp">
+      <DependentUpon>Pages\FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="HomePage.xaml.cpp">
-      <DependentUpon>HomePage.xaml</DependentUpon>
+    <ClCompile Include="Pages\HomePage.xaml.cpp">
+      <DependentUpon>Pages\HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -202,43 +208,51 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Services\Services.cpp" />
-    <ClCompile Include="SettingsPage.xaml.cpp">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    <ClCompile Include="Pages\SettingsPage.xaml.cpp">
+      <DependentUpon>Pages\SettingsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="Styles\NavigationView.xaml.cpp">
+      <DependentUpon>Styles\NavigationView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="ViewModels\HomePageViewModel.cpp" />
-    <ClCompile Include="WebViewPage.xaml.cpp">
-      <DependentUpon>WebViewPage.xaml</DependentUpon>
+    <ClCompile Include="Pages\WebViewPage.xaml.cpp">
+      <DependentUpon>Pages\WebViewPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="FavoritesPage.idl">
-      <DependentUpon>FavoritesPage.xaml</DependentUpon>
+    <Midl Include="Helpers\NavItemIconHelper.idl">
+      <DependentUpon>Helpers\NavItemIconHelper.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="FundamentalsPage.idl">
-      <DependentUpon>FundamentalsPage.xaml</DependentUpon>
+    <Midl Include="Pages\FavoritesPage.idl">
+      <DependentUpon>Pages\FavoritesPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="Helpers\NavigationView.idl">
-      <!--<DependentUpon>Helpers\Helpers.NavItemIconHelper.cpp</DependentUpon>-->
+    <Midl Include="Pages\FundamentalsPage.idl">
+      <DependentUpon>Pages\FundamentalsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="HomePage.idl">
-      <DependentUpon>HomePage.xaml</DependentUpon>
+    <Midl Include="Pages\HomePage.idl">
+      <DependentUpon>Pages\HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
     <Midl Include="MainWindow.idl">
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Midl>
-    <Midl Include="SettingsPage.idl">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    <Midl Include="Pages\SettingsPage.idl">
+      <DependentUpon>Pages\SettingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="WebViewPage.idl">
-      <DependentUpon>WebViewPage.xaml</DependentUpon>
+    <Midl Include="Pages\WebViewPage.idl">
+      <DependentUpon>Pages\WebViewPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
+    <Midl Include="Styles\NavigationView.idl">
+      <DependentUpon>Styles\NavigationView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
   </ItemGroup>
