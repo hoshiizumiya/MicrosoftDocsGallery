@@ -153,7 +153,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
     void FundamentalsPage::PopulateTopicsView()
     {
         // 清空当前项目
-        TopicsGridView().Items().Clear();
+        // TODO: BUG
+        //TopicsGridView().Items().Clear();
         
         // 为每个过滤后的主题创建UI元素
         for (const auto& topic : m_filteredTopics)
@@ -226,7 +227,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
             container.Child(contentPanel);
             
             // 添加到GridView
-            TopicsGridView().Items().Append(container);
+            // TODO: BUG
+            //TopicsGridView().Items().Append(container);
         }
     }
 

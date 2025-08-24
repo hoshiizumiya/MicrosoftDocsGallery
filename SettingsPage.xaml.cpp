@@ -59,6 +59,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
 
     void SettingsPage::FontSizeSlider_ValueChanged(IInspectable const& sender, Primitives::RangeBaseValueChangedEventArgs const& /*e*/)
     {
+        if (!IsLoaded()) return;
+
         auto slider = sender.try_as<Slider>();
         if (slider)
         {
@@ -67,7 +69,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
             SaveSettings();
             
             // 更新字体大小显示
-            FontSizeDisplay().Text(winrt::to_hstring(static_cast<int>(m_fontSize)) + L"px");
+            auto& text = winrt::to_hstring(static_cast<int>(m_fontSize)) + L"px";
+            FontSizeDisplay().Text(text);
         }
     }
 

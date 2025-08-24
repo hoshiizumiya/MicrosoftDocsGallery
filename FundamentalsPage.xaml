@@ -45,12 +45,18 @@
                      TextChanged="SearchBox_TextChanged"/>
         </StackPanel>
 
+        <!-- 
+            TODO: BUG
+            引发了异常: 读取访问权限冲突。
+            **_winrt_abi_type** 是 nullptr。
+        -->
+        
         <!-- 主题网格 -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+        <!--<ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <GridView x:Name="TopicsGridView" 
                       SelectionMode="None">
-                <!-- ItemsSource和ItemTemplate在代码中动态设置 -->
+                --><!-- ItemsSource和ItemTemplate在代码中动态设置 --><!--
             </GridView>
-        </ScrollViewer>
+        </ScrollViewer>-->
     </Grid>
 </Page>

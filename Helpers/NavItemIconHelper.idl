@@ -24,6 +24,4 @@
 		static Microsoft.UI.Xaml.Visibility GetStaticIconVisibility(Microsoft.UI.Xaml.DependencyObject obj);
 		static void SetStaticIconVisibility(Microsoft.UI.Xaml.DependencyObject obj, Microsoft.UI.Xaml.Visibility value);
 	}
-
-
 }

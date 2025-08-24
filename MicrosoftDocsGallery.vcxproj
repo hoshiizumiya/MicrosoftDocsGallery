@@ -144,7 +144,6 @@
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="ViewModels\BindableBase.h" />
-    <ClInclude Include="ViewModels\FundamentalsPageViewModel.h" />
     <ClInclude Include="ViewModels\HomePageViewModel.h" />
     <ClInclude Include="WebViewPage.xaml.h">
       <DependentUpon>WebViewPage.xaml</DependentUpon>
@@ -175,8 +174,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Helpers\NavItemIconHelper.cpp">
-		<DependentUpon>Helpers\NavItemIconHelper.idl</DependentUpon>
-		<SubType>Code</SubType>
+      <DependentUpon>Helpers\NavItemIconHelper.idl</DependentUpon>
+      <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="FavoritesPage.xaml.cpp">
       <DependentUpon>FavoritesPage.xaml</DependentUpon>

@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
+    <Midl Include="Helpers\NavItemIconHelper.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -31,7 +32,6 @@
     <ClInclude Include="Messaging\MessageBus.h" />
     <ClInclude Include="Services\Services.h" />
     <ClInclude Include="ViewModels\BindableBase.h" />
-    <ClInclude Include="ViewModels\FundamentalsPageViewModel.h" />
     <ClInclude Include="ViewModels\HomePageViewModel.h" />
     <ClInclude Include="Models\Models.h">
       <Filter>Models</Filter>
@@ -253,9 +253,5 @@
     <Image Include="Assets\msdn.ico">
       <Filter>Assets</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
   </ItemGroup>
 </Project>
