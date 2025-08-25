@@ -1,16 +1,17 @@
 ﻿#pragma once
-#include <winrt/Windows.Foundation.h>
-#include <winrt/Windows.Foundation.Collections.h>
-#include <winrt/Windows.Storage.h>
-#include <winrt/Windows.Web.Http.h>
-#include <winrt/Windows.Data.Json.h>
+#include "pch.h"
 #include <vector>
 #include <memory>
 #include <functional>
+#include <algorithm>
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Foundation.Collections.h>
+
+using namespace winrt;
 
 namespace winrt::MicrosoftDocsGallery::Services
 {
-    // 数据服务接口 - 简化返回类型
+    // IDataService - plain C++ service interface (not WinRT interface)
     struct IDataService
     {
         virtual ~IDataService() = default;
@@ -19,7 +20,26 @@ namespace winrt::MicrosoftDocsGallery::Services
         virtual winrt::Windows::Foundation::IAsyncAction RefreshDataAsync() = 0;
     };
 
-    // 收藏夹服务接口
+    // Concrete DataService
+    class DataService : public IDataService
+    {
+    public:
+        DataService();
+
+        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicTitlesAsync() override;
+        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicUrlsAsync() override;
+        winrt::Windows::Foundation::IAsyncAction RefreshDataAsync() override;
+
+    private:
+        std::vector<winrt::hstring> m_topicTitles;
+        std::vector<winrt::hstring> m_topicUrls;
+        winrt::Windows::Foundation::DateTime m_lastCacheUpdate{};
+
+        void InitializeDefaultTopics();
+        bool IsCacheValid() const;
+    };
+
+    // IFavoritesService - plain C++ service interface
     struct IFavoritesService
     {
         virtual ~IFavoritesService() = default;
@@ -30,43 +50,11 @@ namespace winrt::MicrosoftDocsGallery::Services
         virtual winrt::Windows::Foundation::IAsyncOperation<bool> IsFavoriteAsync(winrt::hstring const& url) = 0;
     };
 
-    // 设置服务接口
-    struct ISettingsService
-    {
-        virtual ~ISettingsService() = default;
-        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetTotalPagesViewedAsync() = 0;
-        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetFavoritesCountAsync() = 0;
-        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetDaysUsedAsync() = 0;
-        virtual winrt::Windows::Foundation::IAsyncAction UpdateStatisticsAsync(int32_t pagesViewed, int32_t favoritesCount, int32_t daysUsed) = 0;
-    };
-
-    // 数据服务实现
-    class DataService : public IDataService
-    {
-    public:
-        DataService();
-
-        // IDataService 实现
-        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicTitlesAsync() override;
-        winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetTopicUrlsAsync() override;
-        winrt::Windows::Foundation::IAsyncAction RefreshDataAsync() override;
-
-    private:
-        std::vector<winrt::hstring> m_topicTitles;
-        std::vector<winrt::hstring> m_topicUrls;
-        winrt::Windows::Foundation::DateTime m_lastCacheUpdate;
-        
-        void InitializeDefaultTopics();
-        bool IsCacheValid() const;
-    };
-
-    // 收藏夹服务实现
     class FavoritesService : public IFavoritesService
     {
     public:
         FavoritesService();
 
-        // IFavoritesService 实现
         winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetFavoriteUrlsAsync() override;
         winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> GetFavoriteTitlesAsync() override;
         winrt::Windows::Foundation::IAsyncAction AddToFavoritesAsync(winrt::hstring const& url, winrt::hstring const& title) override;
@@ -77,18 +65,26 @@ namespace winrt::MicrosoftDocsGallery::Services
         std::vector<winrt::hstring> m_favoriteUrls;
         std::vector<winrt::hstring> m_favoriteTitles;
         bool m_isLoaded{ false };
-        
+
         winrt::Windows::Foundation::IAsyncAction LoadFavoritesAsync();
         winrt::Windows::Foundation::IAsyncAction SaveFavoritesAsync();
     };
 
-    // 设置服务实现
+    // ISettingsService - plain C++ service interface
+    struct ISettingsService
+    {
+        virtual ~ISettingsService() = default;
+        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetTotalPagesViewedAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetFavoritesCountAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncOperation<int32_t> GetDaysUsedAsync() = 0;
+        virtual winrt::Windows::Foundation::IAsyncAction UpdateStatisticsAsync(int32_t pagesViewed, int32_t favoritesCount, int32_t daysUsed) = 0;
+    };
+
     class SettingsService : public ISettingsService
     {
     public:
         SettingsService();
 
-        // ISettingsService 实现
         winrt::Windows::Foundation::IAsyncOperation<int32_t> GetTotalPagesViewedAsync() override;
         winrt::Windows::Foundation::IAsyncOperation<int32_t> GetFavoritesCountAsync() override;
         winrt::Windows::Foundation::IAsyncOperation<int32_t> GetDaysUsedAsync() override;
@@ -104,28 +100,25 @@ namespace winrt::MicrosoftDocsGallery::Services
         winrt::Windows::Foundation::IAsyncAction SaveStatisticsAsync();
     };
 
-    // 服务定位器 - 依赖注入的简单实现
+    // ServiceLocator - simple DI container
     class ServiceLocator
     {
     public:
         static ServiceLocator& Instance();
 
-        // 服务注册
         void RegisterDataService(std::shared_ptr<IDataService> service);
         void RegisterFavoritesService(std::shared_ptr<IFavoritesService> service);
         void RegisterSettingsService(std::shared_ptr<ISettingsService> service);
 
-        // 服务获取
         std::shared_ptr<IDataService> GetDataService() const;
         std::shared_ptr<IFavoritesService> GetFavoritesService() const;
         std::shared_ptr<ISettingsService> GetSettingsService() const;
 
-        // 初始化默认服务
         void InitializeDefaultServices();
 
     private:
         ServiceLocator() = default;
-        
+
         std::shared_ptr<IDataService> m_dataService;
         std::shared_ptr<IFavoritesService> m_favoritesService;
         std::shared_ptr<ISettingsService> m_settingsService;

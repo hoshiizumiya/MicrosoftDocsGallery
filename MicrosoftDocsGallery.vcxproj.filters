@@ -17,6 +17,7 @@
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
     <Midl Include="Helpers\NavItemIconHelper.idl" />
+    <Midl Include="Services\Services.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -253,5 +254,9 @@
     <Image Include="Assets\msdn.ico">
       <Filter>Assets</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
   </ItemGroup>
 </Project>

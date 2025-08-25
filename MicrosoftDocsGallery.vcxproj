@@ -138,7 +138,10 @@
     <ClInclude Include="MainWindow.xaml.h">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </ClInclude>
-    <ClInclude Include="Services\Services.h" />
+	  <ClInclude Include="Services\Services.h">
+		  <DependentUpon>Services\Services.idl</DependentUpon>
+		  <SubType>Code</SubType>
+	  </ClInclude>
     <ClInclude Include="SettingsPage.xaml.h">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -202,7 +205,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Services\Services.cpp" />
+	  <ClCompile Include="Services\Services.cpp">
+		  <DependentUpon>Services\Services.idl</DependentUpon>
+		  <SubType>Code</SubType>
+	  </ClCompile>
     <ClCompile Include="SettingsPage.xaml.cpp">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -233,6 +239,9 @@
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Midl>
+	  <Midl Include="Services\Services.idl">
+		  <SubType>Code</SubType>
+	  </Midl>
     <Midl Include="SettingsPage.idl">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>

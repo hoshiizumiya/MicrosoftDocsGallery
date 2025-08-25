@@ -99,7 +99,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 
     void HomePage::OpenWinUIDocs_Click(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& /*e*/)
     {
-        throw winrt::hresult_not_implemented();
+        OnNavigationRequested(nullptr, L"https://docs.microsoft.com/en-us/windows/apps/winui/winui3/");
     }
 }
 

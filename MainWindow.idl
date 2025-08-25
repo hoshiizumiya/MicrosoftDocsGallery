@@ -26,5 +26,8 @@
         
         // 导航管理
         void SetNavigationSelection(String pageTag);
+
+        Windows.Foundation.IAsyncAction OpenBrowserAsync(String uristring);
+
     }
 }

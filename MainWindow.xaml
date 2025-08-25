@@ -86,7 +86,8 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
             BackRequested="nav_BackRequested"
-            IsBackButtonVisible="{x:Bind mainFrame.CanGoBack, Mode=OneWay}">
+            IsBackButtonEnabled="{x:Bind mainFrame.CanGoBack, Mode=OneWay}"
+            IsBackButtonVisible="True">
             <TitleBar.LeftHeader>
                 <Image
                     x:Name="HeadLogo"

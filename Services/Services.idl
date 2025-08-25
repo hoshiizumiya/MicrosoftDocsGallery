@@ -1,0 +1,8 @@
+﻿namespace MicrosoftDocsGallery.Services
+{
+	//
+	// This IDL previously declared runtimeclasses that conflicted with
+	// our internal C++ service layer. We intentionally keep this
+	// namespace empty to avoid C++/WinRT projections for these types.
+	//
+}
