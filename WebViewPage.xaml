@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MicrosoftDocsGallery"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <!--  新增：本页资源，补齐 SubtleButtonStyle，避免页面加载抛错  -->
@@ -39,7 +40,6 @@
         <NavigationView
             x:Name="DocNavigationView"
             Grid.Column="0"
-            Header="Table of Contents"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False"
             IsSettingsVisible="False"
@@ -113,43 +113,53 @@
             CloseButtonOverlayMode="OnPointerOver"
             SelectionChanged="TabView_SelectionChanged"
             TabCloseRequested="TabView_TabCloseRequested">
+            <TabView.KeyboardAccelerators>
+                <KeyboardAccelerator
+                    Key="T"
+                    Invoked="NewTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="W"
+                    Invoked="CloseSelectedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number1"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number2"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number3"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number4"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number5"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number6"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number7"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number8"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="Number9"
+                    Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+            </TabView.KeyboardAccelerators>
 
-            <!--  Default tab template  -->
-            <TabView.TabItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <!--  Tab icon  -->
-                        <FontIcon
-                            Grid.Column="0"
-                            Margin="0,0,6,0"
-                            FontSize="12"
-                            Glyph="&#xE7BE;" />
-
-                        <!--  Tab title  -->
-                        <TextBlock
-                            Grid.Column="1"
-                            MaxWidth="150"
-                            VerticalAlignment="Center"
-                            Text="{Binding Title}"
-                            TextTrimming="CharacterEllipsis" />
-
-                        <!--  Loading indicator  -->
-                        <ProgressRing
-                            Grid.Column="2"
-                            Width="16"
-                            Height="16"
-                            Margin="6,0,0,0"
-                            IsActive="{Binding IsLoading}"
-                            Visibility="{Binding IsLoading}" />
-                    </Grid>
-                </DataTemplate>
-            </TabView.TabItemTemplate>
         </TabView>
     </Grid>
 </Page>
