@@ -5,12 +5,13 @@
 #endif
 #include <random>
 #include <sstream>
-#include <algorithm>
 #include <winrt/Windows.System.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
 using namespace Microsoft::UI::Xaml::Controls;
+using namespace Windows::UI::Xaml::Interop;
+using namespace Microsoft::UI::Windowing;
 using namespace Windows::Foundation;
 
 namespace winrt::MicrosoftDocsGallery::implementation
@@ -26,6 +27,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		InitializeComponent();
 		m_isInitialized = false;
 		this->NavigationCacheMode(Navigation::NavigationCacheMode::Required); // 启用导航缓存，避免重复加载（全部缓存无视帧大小）
+
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -793,5 +795,105 @@ namespace winrt::MicrosoftDocsGallery::implementation
 
 		args.Handled(true);
 	}
+
+	void winrt::MicrosoftDocsGallery::implementation::WebViewPage::ReloadSelectedTabKeyboardAccelerator_Invoked(winrt::Microsoft::UI::Xaml::Input::KeyboardAccelerator const& sender, winrt::Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args)
+	{
+		auto tabData = GetCurrentTabData();
+		if (!tabData || !tabData->WebView)
+			return;
+
+		tabData->WebView.Reload();
+	}
 #pragma endregion
+
+#pragma region Spilter
+
+	void WebViewPage::ColumnSplitter_PointerEntered(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& /*e*/)
+	{
+		// 可选：在此设置光标为左右调整形状（WinUI 3 中跨平台方式较复杂，默认不改动）
+		try
+		{
+			Microsoft::UI::Xaml::Window window = Microsoft::UI::Xaml::Window::Current();
+			auto appWindow = window.AppWindow();
+			//appWindow.PointerCursor(CoreCursor(CoreCursorType.SizeWestEast, 0));
+			//_previousCursor = Windows::UI::Core::CoreWindow::PointerCursor();
+			//Microsoft::UI::Xaml::Window::AppWindow PointerCursor = CoreCursor(CoreCursorType.SizeWestEast, 0);
+		}
+		catch (...)
+		{ /* ignore in environments without mouse */
+		}
+	}
+
+	void WebViewPage::ColumnSplitter_PointerExited(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& /*e*/)
+	{
+		// 可选：恢复光标，默认不处理
+		if (_isDragging) return;
+
+		try
+		{
+		}
+		catch (...)
+		{ /* ignore */
+		}
+	}
+
+	void WebViewPage::ColumnSplitter_PointerPressed(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e)
+	{
+		_isDragging = true;
+
+		// 记录起始位置与初始宽度
+		_dragStartX = e.GetCurrentPoint(nullptr).Position().X;
+		_startWidth = TocColumn().ActualWidth();
+
+		// 捕获指针，避免拖动时丢失事件
+		if (auto fe = sender.try_as<FrameworkElement>())
+		{
+			fe.CapturePointer(e.Pointer());
+		}
+
+		e.Handled(true);
+	}
+
+	void WebViewPage::ColumnSplitter_PointerMoved(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e)
+	{
+		if (!_isDragging)
+			return;
+
+		const double currentX = e.GetCurrentPoint(nullptr).Position().X;
+		const double delta = currentX - _dragStartX;
+
+		double newWidth = _startWidth + delta;
+
+		// 约束到 ColumnDefinition 的 Min/Max 范围
+		const double min = std::max(0.0, TocColumn().MinWidth());
+		const double max = TocColumn().MaxWidth(); // 若为无穷大，min/max 仍然工作良好
+
+		newWidth = std::max(min, newWidth);
+		if (max > 0) // 正数即表示存在最大值（无穷大也 > 0，不会改变结果）
+		{
+			newWidth = std::min(max, newWidth);
+		}
+
+		TocColumn().Width(GridLengthHelper::FromPixels(newWidth));
+
+		e.Handled(true);
+	}
+
+	void WebViewPage::ColumnSplitter_PointerReleased(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e)
+	{
+		if (!_isDragging)
+			return;
+
+		_isDragging = false;
+
+		if (auto fe = sender.try_as<FrameworkElement>())
+		{
+			fe.ReleasePointerCapture(e.Pointer());
+		}
+
+		e.Handled(true);
+	}
+
+#pragma endregion
+
 }

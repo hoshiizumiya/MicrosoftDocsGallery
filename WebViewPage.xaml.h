@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "pch.h"
 #include "WebViewPage.g.h"
 #include <vector>
 #include <memory>
@@ -142,7 +142,19 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		void NewTabKeyboardAccelerator_Invoked(Microsoft::UI::Xaml::Input::KeyboardAccelerator const&, Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
 		void CloseSelectedTabKeyboardAccelerator_Invoked(Microsoft::UI::Xaml::Input::KeyboardAccelerator const&, Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
 		void NavigateToNumberedTabKeyboardAccelerator_Invoked(Microsoft::UI::Xaml::Input::KeyboardAccelerator const& sender, Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
+		void ReloadSelectedTabKeyboardAccelerator_Invoked(winrt::Microsoft::UI::Xaml::Input::KeyboardAccelerator const& sender, winrt::Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
 
+		// 列分割器拖动调整
+		void ColumnSplitter_PointerPressed(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e);
+		void ColumnSplitter_PointerReleased(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e);
+		void ColumnSplitter_PointerMoved(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e);
+		void ColumnSplitter_PointerEntered(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e);
+		void ColumnSplitter_PointerExited(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e);
+
+		bool _isDragging;
+		double _dragStartX;
+		double _startWidth;
+		//Windows::UI::Core::CoreCursor _previousCursor;
 	};
 }
 

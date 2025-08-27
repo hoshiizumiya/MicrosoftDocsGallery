@@ -28,6 +28,7 @@
         <Grid.ColumnDefinitions>
             <!--  NavigationView for table of contents  -->
             <ColumnDefinition
+                x:Name="TocColumn"
                 Width="200"
                 MinWidth="200"
                 MaxWidth="400" />
@@ -99,11 +100,23 @@
             </NavigationView.Content>
         </NavigationView>
 
-        <!--  Splitter  -->
+        <!--  Splitter（可拖拽调整左右间隔）  -->
         <Border
+            x:Name="ColumnSplitter"
             Grid.Column="1"
-            Width="1"
-            Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+            Width="5"
+            Background="Transparent"
+            PointerPressed="ColumnSplitter_PointerPressed"
+            PointerReleased="ColumnSplitter_PointerReleased"
+            PointerMoved="ColumnSplitter_PointerMoved"
+            PointerEntered="ColumnSplitter_PointerEntered"
+            PointerExited="ColumnSplitter_PointerExited">
+            <!-- 保持原有的 1px 视觉分割线，同时扩大 5px 命中区域 -->
+            <Border
+                Width="1"
+                HorizontalAlignment="Center"
+                Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+        </Border>
 
         <!--  Main TabView Area  -->
         <TabView
@@ -121,6 +134,10 @@
                 <KeyboardAccelerator
                     Key="W"
                     Invoked="CloseSelectedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="R"
+                    Invoked="ReloadSelectedTabKeyboardAccelerator_Invoked"
                     Modifiers="Control" />
                 <KeyboardAccelerator
                     Key="Number1"
