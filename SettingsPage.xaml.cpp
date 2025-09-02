@@ -69,8 +69,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
             SaveSettings();
             
             // 更新字体大小显示
-            auto& text = winrt::to_hstring(static_cast<int>(m_fontSize)) + L"px";
-            FontSizeDisplay().Text(text);
+            FontSizeDisplay().Text(winrt::to_hstring(static_cast<int>(m_fontSize)) + L"px");
         }
     }
 

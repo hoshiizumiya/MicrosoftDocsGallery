@@ -65,6 +65,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		// EN: On first navigation, creates a tab using parameter URL or a default URL
 		void OnNavigatedTo(winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& e);
 
+		void Page_SizeChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::SizeChangedEventArgs const& e);
+
 		// 页面加载完成事件（兜底）
 		// CN: 若因某些路径未创建任何标签，则在 Loaded 时确保至少有一个默认标签
 		// EN: Fallback to ensure at least one default tab exists once the visual tree is loaded
@@ -107,7 +109,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		// CN: 创建 Tab 项、创建 WebView2、异步加载页面、查找当前标签/按 Id 查找、生成标签 Id
 		// EN: Internal helpers to create a TabViewItem, create a WebView2, load page asynchronously,
 		//     get current tab or find by id, and generate unique tab ids
-		winrt::Microsoft::UI::Xaml::Controls::TabViewItem CreateTabItem(std::shared_ptr<TabData> tabData);
+		winrt::Microsoft::UI::Xaml::Controls::TabViewItem CreateTabViewItem(std::shared_ptr<TabData> tabData);
 		winrt::Microsoft::UI::Xaml::Controls::WebView2 CreateWebView();
 		winrt::Windows::Foundation::IAsyncAction LoadWebPageAsync(std::shared_ptr<TabData> tabData);
 		std::shared_ptr<TabData> GetCurrentTabData();
@@ -132,6 +134,8 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		// CN: 标签集合、当前标签 Id、初始化标记、递增 Id 序列
 		// EN: Tab collection, current tab id, init flag, and incrementing id sequence
 		std::vector<std::shared_ptr<TabData>> m_tabs;
+		std::vector<std::shared_ptr<TabData>> m_recentlyClosed; // 使用 TabData 类型复用结构
+		size_t m_recentlyClosedMax = 10; // 最近关闭历史最大条数，考虑在设置中调整
 		winrt::hstring m_currentTabId;
 		bool m_isInitialized = false;
 		int m_nextTabNumber = 1;
@@ -140,6 +144,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		// CN: 处理 Ctrl+T（新标签）、Ctrl+W（关闭标签）、Ctrl+1~9（切换标签）
 		// EN: Handle Ctrl+T (new tab), Ctrl+W (close tab), Ctrl+1~9 (switch to tab)
 		void NewTabKeyboardAccelerator_Invoked(Microsoft::UI::Xaml::Input::KeyboardAccelerator const&, Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
+		void ReopenClosedTabKeyboardAccelerator_Invoked(winrt::Microsoft::UI::Xaml::Input::KeyboardAccelerator const& sender, winrt::Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
 		void CloseSelectedTabKeyboardAccelerator_Invoked(Microsoft::UI::Xaml::Input::KeyboardAccelerator const&, Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
 		void NavigateToNumberedTabKeyboardAccelerator_Invoked(Microsoft::UI::Xaml::Input::KeyboardAccelerator const& sender, Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
 		void ReloadSelectedTabKeyboardAccelerator_Invoked(winrt::Microsoft::UI::Xaml::Input::KeyboardAccelerator const& sender, winrt::Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args);
@@ -151,10 +156,19 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		void ColumnSplitter_PointerEntered(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e);
 		void ColumnSplitter_PointerExited(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& e);
 
-		bool _isDragging;
-		double _dragStartX;
-		double _startWidth;
-		//Windows::UI::Core::CoreCursor _previousCursor;
+		// api 尚不可用
+		//Microsoft::UI::Input::InputSystemCursor m_sizeWestEastCursor{ nullptr };
+
+		void InstallCursorSubclass(HWND hwnd);
+		void RemoveCursorSubclass(HWND hwnd);
+
+		// 设置或清除“覆盖光标”。hCursor 不由本模块销毁，仅引用。
+		// 传入 nullptr 表示清除覆盖（恢复默认由系统决定）。
+		void SetOverrideCursor(HCURSOR hCursor);
+
+		bool _isDragging = 0;
+		double _dragStartX = 0.0;
+		double _startWidth = 0.0;
 	};
 }
 

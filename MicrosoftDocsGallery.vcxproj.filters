@@ -25,6 +25,7 @@
     <ClCompile Include="Services\Services.cpp" />
     <ClCompile Include="ViewModels\HomePageViewModel.cpp" />
     <ClCompile Include="Helpers\NavItemIconHelper.cpp" />
+    <ClCompile Include="Helpers\WindowHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -37,6 +38,7 @@
     <ClInclude Include="Models\Models.h">
       <Filter>Models</Filter>
     </ClInclude>
+    <ClInclude Include="Helpers\WindowHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

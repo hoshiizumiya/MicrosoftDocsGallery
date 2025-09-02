@@ -7,6 +7,7 @@
     xmlns:local="using:MicrosoftDocsGallery"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Loaded="Page_Loaded"
+    SizeChanged="Page_SizeChanged"
     mc:Ignorable="d">
 
     <!--  新增：本页资源，补齐 SubtleButtonStyle，避免页面加载抛错  -->
@@ -30,7 +31,7 @@
             <ColumnDefinition
                 x:Name="TocColumn"
                 Width="200"
-                MinWidth="200"
+                MinWidth="100"
                 MaxWidth="400" />
             <ColumnDefinition Width="Auto" />
             <!--  Main content area  -->
@@ -106,12 +107,12 @@
             Grid.Column="1"
             Width="5"
             Background="Transparent"
-            PointerPressed="ColumnSplitter_PointerPressed"
-            PointerReleased="ColumnSplitter_PointerReleased"
-            PointerMoved="ColumnSplitter_PointerMoved"
             PointerEntered="ColumnSplitter_PointerEntered"
-            PointerExited="ColumnSplitter_PointerExited">
-            <!-- 保持原有的 1px 视觉分割线，同时扩大 5px 命中区域 -->
+            PointerExited="ColumnSplitter_PointerExited"
+            PointerMoved="ColumnSplitter_PointerMoved"
+            PointerPressed="ColumnSplitter_PointerPressed"
+            PointerReleased="ColumnSplitter_PointerReleased">
+            <!--  保持原有的 1px 视觉分割线，同时扩大 5px 命中区域  -->
             <Border
                 Width="1"
                 HorizontalAlignment="Center"
@@ -122,6 +123,7 @@
         <TabView
             x:Name="WebTabView"
             Grid.Column="2"
+            Height="{Binding ActualHeight, ElementName=ColumnSplitter, Mode=OneTime}"
             AddTabButtonClick="TabView_AddButtonClick"
             CloseButtonOverlayMode="OnPointerOver"
             SelectionChanged="TabView_SelectionChanged"
@@ -131,6 +133,10 @@
                     Key="T"
                     Invoked="NewTabKeyboardAccelerator_Invoked"
                     Modifiers="Control" />
+                <KeyboardAccelerator
+                    Key="T"
+                    Invoked="ReopenClosedTabKeyboardAccelerator_Invoked"
+                    Modifiers="Control,Shift" />
                 <KeyboardAccelerator
                     Key="W"
                     Invoked="CloseSelectedTabKeyboardAccelerator_Invoked"

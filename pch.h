@@ -7,13 +7,6 @@
 #include <restrictederrorinfo.h>
 #include <hstring.h>
 
-// This is required otherwise VSDESIGNER will have linker errors.
-#define _VSDESIGNER_DONT_LOAD_AS_DLL
-
-#define DISABLE_XAML_GENERATED_MAIN
-
-#include <wil/cppwinrt.h>  // 必须最先包含以启用异常扩展点
-#include <wil/cppwinrt_helpers.h>
 
 // Undefine GetCurrentTime macro to prevent
 // conflict with Storyboard::GetCurrentTime
@@ -51,6 +44,7 @@
 #include <winrt/Windows.Web.Http.h>
 #include <winrt/Windows.Data.Json.h>
 
+#include <wil/cppwinrt_helpers.h>
 // Cpp 常用库头文件
 // 基本
 #include <cstdint>

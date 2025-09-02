@@ -6,6 +6,8 @@
 #include <random>
 #include <sstream>
 #include <winrt/Windows.System.h>
+#include "Helpers/WindowHelper.h"
+
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -13,6 +15,9 @@ using namespace Microsoft::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Interop;
 using namespace Microsoft::UI::Windowing;
 using namespace Windows::Foundation;
+
+// Alias the native helper namespace to avoid name lookup under winrt::
+namespace WDHH = ::MicrosoftDocsGallery::Helpers::WinUIWindowHelper;
 
 namespace winrt::MicrosoftDocsGallery::implementation
 {
@@ -62,6 +67,12 @@ namespace winrt::MicrosoftDocsGallery::implementation
 			}
 			m_isInitialized = true;
 		}
+	}
+
+	// CN:给 WebViewItem Content 动态响应以调整高度，因为我不知道为什么 Binding 的 Height 为什么没有起效果
+	void WebViewPage::Page_SizeChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::SizeChangedEventArgs const& e)
+	{
+		WebTabView().Height(e.NewSize().Height); // e.NewSize() 表示 Page 在布局流程完成后获得的新“可用尺寸”（layout slot），即 Page 的可见宽高。我不太清楚为什么这样就不用做多余的计算了
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -224,18 +235,36 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		tabData->WebView = CreateWebView();
 
 		// 创建TabViewItem
-		auto tabItem = CreateTabItem(tabData);
+		auto tabViewItem = CreateTabViewItem(tabData);
 
-		// 添加到集合
+		// 使用 vector m_tabs 保存当前浏览信息（这个不包含已删除关闭的页面——存疑）
 		m_tabs.push_back(tabData);
-		WebTabView().TabItems().Append(tabItem);
 
-		// 选中新标签页
-		WebTabView().SelectedItem(tabItem);
-		m_currentTabId = tabData->Id;
+		// 使用 DispatcherQueue 确保在 UI 线程并在模板应用后更新集合与选中项，避免“未刷新”现象
+		auto tabView = WebTabView();
+		if (auto dq = tabView ? tabView.DispatcherQueue() : this->DispatcherQueue())
+		{
+			dq.TryEnqueue([this, tabViewItem, tabData]() mutable {
+				// 把新建的 TabViewItem 添加到集合
+				WebTabView().TabItems().Append(tabViewItem);
+				
+				// 选中新标签页
+				WebTabView().SelectedItem(tabViewItem);
+				m_currentTabId = tabData->Id;
 
-		// 加载网页
-		LoadWebPageAsync(tabData);
+				// 加载网页（保持在 UI 循环之后开始）
+				LoadWebPageAsync(tabData);
+						  });
+		}
+		else
+		{
+			// 回退：直接添加（通常仍在 UI 线程）
+			WebTabView().TabItems().Append(tabViewItem);
+			WebTabView().SelectedItem(tabViewItem);
+			m_currentTabId = tabData->Id;
+			LoadWebPageAsync(tabData);
+		}
+
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -250,6 +279,26 @@ namespace winrt::MicrosoftDocsGallery::implementation
 
 		if (it != m_tabs.end())
 		{
+			// ctrl shift T 功能：保存最近关闭的标签页（URL + Title）逻辑
+			// 保存快照（复用 TabData 类型，但不保留 WebView 实例）
+			auto closed = *it;
+			if (!closed->Url.empty())
+			{
+				auto snapshot = std::make_shared<TabData>();
+				snapshot->Url = closed->Url;
+				snapshot->Title = closed->Title;
+				snapshot->IsLoading = false;
+				snapshot->WebView = nullptr; // 重要：不要保留 WebView2 指针
+				// 可选择不保留 Id
+
+				m_recentlyClosed.push_back(snapshot);
+				if (m_recentlyClosed.size() > m_recentlyClosedMax)
+				{
+					// 移除最旧的
+					m_recentlyClosed.erase(m_recentlyClosed.begin());
+				}
+			}
+
 			// 从TabView中移除对应的TabViewItem
 			auto tabItems = WebTabView().TabItems();
 			for (uint32_t i = 0; i < tabItems.Size(); ++i)
@@ -479,26 +528,26 @@ namespace winrt::MicrosoftDocsGallery::implementation
 	}
 
 	// --------------------------------------------------------------------------------------------
-	// CreateTabItem
+	// CreateTabViewItem
 	// CN: 创建 TabViewItem，设置自定义 Header，内容为 WebView2。内容对齐方式设为 Stretch 填满。
 	// EN: Create TabViewItem, set custom header, content as WebView2. Align content stretch to fill.
 	// --------------------------------------------------------------------------------------------
-	TabViewItem WebViewPage::CreateTabItem(std::shared_ptr<TabData> tabData)
+	TabViewItem WebViewPage::CreateTabViewItem(std::shared_ptr<TabData> tabData)
 	{
-		TabViewItem tabItem;
-		tabItem.Tag(winrt::box_value(tabData->Id));
+		TabViewItem tabViewItem;
+		tabViewItem.Tag(winrt::box_value(tabData->Id));
 		// 确保内容拉伸填满
-		tabItem.HorizontalContentAlignment(HorizontalAlignment::Stretch);
-		tabItem.VerticalContentAlignment(VerticalAlignment::Stretch);
+		tabViewItem.HorizontalContentAlignment(HorizontalAlignment::Stretch);
+		tabViewItem.VerticalContentAlignment(VerticalAlignment::Stretch);
 
 		// 设置自定义 Header
 		auto header = BuildTabHeader(tabData);
-		tabItem.Header(header);
+		tabViewItem.Header(header);
 
 		// 设置WebView2作为内容
-		tabItem.Content(tabData->WebView);
+		tabViewItem.Content(tabData->WebView);
 
-		return tabItem;
+		return tabViewItem;
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -515,14 +564,17 @@ namespace winrt::MicrosoftDocsGallery::implementation
 	// --------------------------------------------------------------------------------------------
 	WebView2 WebViewPage::CreateWebView()
 	{
-		// 创建一个完整的WebView2控件 EN: Create a full WebView2 control
+		// 创建一个完整的WebView2控件 
+		// EN: Create a full WebView2 control
 		WebView2 webView;
 		// 拉伸以适应Tab内容
 		webView.HorizontalAlignment(HorizontalAlignment::Stretch);
 		webView.VerticalAlignment(VerticalAlignment::Stretch);
 
-		// 配置WebView2事件，处理导航状态与标题更新 EN: Configure WebView2 events to handle navigation state and title updates
-		// NavigationStarting API 来自 WebView2 控件，在导航开始时触发 EN: NavigationStarting API comes from WebView2 control, triggered at navigation start
+		// 配置WebView2事件，处理导航状态与标题更新 
+		// EN: Configure WebView2 events to handle navigation state and title updates
+		// NavigationStarting API 来自 WebView2 控件，在导航开始时触发 
+		// EN: NavigationStarting API comes from WebView2 control, triggered at navigation start
 		webView.NavigationStarting([this](auto const& sender, auto const& /*args*/) {
 			// sender.as<WebView2>() 获取当前触发事件的 WebView2 实例 
 			// EN: sender.as<WebView2>() gets the current WebView2 instance triggering the event
@@ -541,14 +593,16 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		webView.NavigationCompleted([this](auto const& sender, auto const& /*args*/) {
 			auto webView = sender.as<WebView2>();
 
-			// 查找与我们保存变量相同的 TabData 如果匹配到对应的页面则更新状态与标题 EN: Find the corresponding TabData; if matched, update status and title
+			// 查找与我们保存变量相同的 TabData 如果匹配到对应的页面则更新状态与标题
+			// EN: Find the corresponding TabData; if matched, update status and title
 			for (auto& tabData : m_tabs)
 			{
 				if (tabData->WebView == webView)
 				{
 					UpdateTabHeaderLoading(tabData, false);
 
-					// 获取页面标题（注意返回值是 JSON 字符串）  EN: Get the page title (note the return value is a JSON string)
+					// 获取页面标题（注意返回值是 JSON 字符串） 
+					// EN: Get the page title (note the return value is a JSON string)
 					webView.ExecuteScriptAsync(L"document.title").Completed([this, tabData](auto const& asyncOp, auto const& status) {
 						if (status == AsyncStatus::Completed)
 						{
@@ -796,7 +850,7 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		args.Handled(true);
 	}
 
-	void winrt::MicrosoftDocsGallery::implementation::WebViewPage::ReloadSelectedTabKeyboardAccelerator_Invoked(winrt::Microsoft::UI::Xaml::Input::KeyboardAccelerator const& sender, winrt::Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args)
+	void WebViewPage::ReloadSelectedTabKeyboardAccelerator_Invoked(winrt::Microsoft::UI::Xaml::Input::KeyboardAccelerator const& /*sender*/, winrt::Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& /*args*/)
 	{
 		auto tabData = GetCurrentTabData();
 		if (!tabData || !tabData->WebView)
@@ -804,20 +858,76 @@ namespace winrt::MicrosoftDocsGallery::implementation
 
 		tabData->WebView.Reload();
 	}
+
+	//Ctrl + Shift + T 应打开最近关闭的选项卡（或者更准确地说，打开与最近关闭的选项卡相同的新选项卡）。 可以从最近关闭的选项卡开始，以后溯的方式针对每个后续时间调用此快捷方式。 请注意，这需要保留一个列表，其中包含最近关闭的选项卡。
+	void WebViewPage::ReopenClosedTabKeyboardAccelerator_Invoked(winrt::Microsoft::UI::Xaml::Input::KeyboardAccelerator const& /*sender*/, winrt::Microsoft::UI::Xaml::Input::KeyboardAcceleratorInvokedEventArgs const& args)
+	{
+		// 需要维护一个最近关闭的标签页列表，考虑使用已有的 m_tabs 进行扩展，使用 m_recentlyClosed 保存已关闭的标签页信息
+
+		if (m_recentlyClosed.empty())
+		{
+			args.Handled(true);
+			return;
+		}
+
+		// 弹出最近关闭的一项（栈顶为最新）
+		auto snapshot = m_recentlyClosed.back();
+		m_recentlyClosed.pop_back();
+
+		// 使用保存的 Url/Title 重新打开（AddNewTab 会创建新的 WebView2 并导航）
+		auto url = snapshot->Url;
+		auto title = snapshot->Title.empty() ? hstring(L"Reopened Tab") : snapshot->Title;
+		AddNewTab(url, title);
+
+		args.Handled(true);
+	}
+
+
 #pragma endregion
 
 #pragma region Spilter
 
-	void WebViewPage::ColumnSplitter_PointerEntered(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& /*e*/)
+	void WebViewPage::ColumnSplitter_PointerEntered(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& /*e*/)
 	{
-		// 可选：在此设置光标为左右调整形状（WinUI 3 中跨平台方式较复杂，默认不改动）
 		try
 		{
-			Microsoft::UI::Xaml::Window window = Microsoft::UI::Xaml::Window::Current();
-			auto appWindow = window.AppWindow();
-			//appWindow.PointerCursor(CoreCursor(CoreCursorType.SizeWestEast, 0));
-			//_previousCursor = Windows::UI::Core::CoreWindow::PointerCursor();
-			//Microsoft::UI::Xaml::Window::AppWindow PointerCursor = CoreCursor(CoreCursorType.SizeWestEast, 0);
+			//auto appWindow = WDHH::WindowHelper::GetAppWindowForElement(*this);
+			// or this way that use the current window to get AppWindow
+			//Microsoft::UI::Xaml::Window window = Microsoft::UI::Xaml::Window::Current();
+			//auto appWindow = window.AppWindow();
+			// 此 api 暂不可用。参考：
+			// https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.input.inputsystemcursorshape
+			// 
+			// 缓存光标对象为成员（可在类定义里声明：Microsoft::UI::Input::InputSystemCursor m_sizeWestEastCursor{ nullptr };）
+			//if (!m_sizeWestEastCursor)
+			//{
+			//	m_sizeWestEastCursor = Microsoft::UI::Input::InputSystemCursor::Create(Microsoft::UI::Input::InputSystemCursorShape::SizeWestEast);
+			//}
+
+			//// 将光标应用到触发事件的元素上（sender 通常是分割条的 FrameworkElement）
+			//if (auto fe = sender.try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>())
+			//{
+			//	fe.PointerCursor(m_sizeWestEastCursor);
+			//}
+			auto hwnd = WDHH::WindowHelper::GetNativeWindowHandleForElement(*this);
+
+			// fallback: 非推荐，但便于快速在桌面测试
+			if (!hwnd)
+			{
+				hwnd = ::GetActiveWindow();
+			}
+
+			if (hwnd)
+			{
+				InstallCursorSubclass(hwnd);
+			}
+			SetOverrideCursor(::LoadCursor(NULL, IDC_SIZEWE));
+
+			//::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+			//SetCursor((HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(IDC_SIZEWE), IMAGE_CURSOR, 0, 0, LR_SHARED));			// old UWP API not work at WINUI3......
+			// https://learn.microsoft.com/en-us/uwp/api/windows.ui.core.corewindow.pointercursor
+			//Microsoft::UI::Input::InputCursor::CreateFromCoreCursor()
+			//Windows::UI::Core::CoreWindow().PointerCursor(CoreCursor(CoreCursorType.SizeWestEast, 0));
 		}
 		catch (...)
 		{ /* ignore in environments without mouse */
@@ -826,11 +936,14 @@ namespace winrt::MicrosoftDocsGallery::implementation
 
 	void WebViewPage::ColumnSplitter_PointerExited(winrt::Windows::Foundation::IInspectable const& /*sender*/, winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const& /*e*/)
 	{
-		// 可选：恢复光标，默认不处理
+		// 恢复光标
 		if (_isDragging) return;
 
 		try
 		{
+			// 恢复为默认箭头光标
+			//::SetCursor(::LoadCursor(nullptr, IDC_ARROW));
+
 		}
 		catch (...)
 		{ /* ignore */
@@ -850,6 +963,9 @@ namespace winrt::MicrosoftDocsGallery::implementation
 		{
 			fe.CapturePointer(e.Pointer());
 		}
+
+		// 在按下并开始拖动时也保持调整光标
+		//::SetCursor(::LoadCursor(nullptr, IDC_SIZEWE));
 
 		e.Handled(true);
 	}
@@ -876,6 +992,9 @@ namespace winrt::MicrosoftDocsGallery::implementation
 
 		TocColumn().Width(GridLengthHelper::FromPixels(newWidth));
 
+		// 保持调整光标在拖动期间
+		//::SetCursor(::LoadCursor(nullptr, IDC_SIZEWE));
+
 		e.Handled(true);
 	}
 
@@ -891,9 +1010,68 @@ namespace winrt::MicrosoftDocsGallery::implementation
 			fe.ReleasePointerCapture(e.Pointer());
 		}
 
+		// 拖动结束，恢复默认光标
+		//::SetCursor(::LoadCursor(nullptr, IDC_ARROW));
+
 		e.Handled(true);
 	}
 
+#include <commctrl.h>
+#include <atomic>
+
+#pragma comment(lib, "Comctl32.lib")
+
+	static std::atomic<HCURSOR> g_overrideCursor{ nullptr };
+
+	LRESULT CALLBACK CursorSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam,
+										UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
+	{
+		if (msg == WM_SETCURSOR)
+		{
+			HCURSOR h = g_overrideCursor.load();
+			if (h)
+			{
+				::SetCursor(h);
+				// 返回 TRUE/非零 表示已处理（不让默认代码覆盖）
+				return TRUE;
+			}
+		}
+		// 未处理则交给默认子类处理
+		return DefSubclassProc(hwnd, msg, wParam, lParam);
+	}
+
+	void WebViewPage::InstallCursorSubclass(HWND hwnd)
+	{
+		if (hwnd)
+		{
+			SetWindowSubclass(hwnd, CursorSubclassProc, 1, 0);
+		}
+	}
+
+	void WebViewPage::RemoveCursorSubclass(HWND hwnd)
+	{
+		if (hwnd)
+		{
+			RemoveWindowSubclass(hwnd, CursorSubclassProc, 1);
+		}
+	}
+
+	void WebViewPage::SetOverrideCursor(HCURSOR hCursor)
+	{
+		g_overrideCursor.store(hCursor);
+
+		// 立即刷新当前窗口下的光标显示（触发 WM_SETCURSOR）
+		POINT pt;
+		if (::GetCursorPos(&pt))
+		{
+			HWND hwnd = ::WindowFromPoint(pt);
+			if (hwnd)
+			{
+				// MAKELPARAM(HTCLIENT, WM_MOUSEMOVE) 常用于模拟鼠标移动触发 WM_SETCURSOR
+				::SendMessage(hwnd, WM_SETCURSOR, reinterpret_cast<WPARAM>(hwnd), MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
+			}
+		}
+	}
 #pragma endregion
 
 }
